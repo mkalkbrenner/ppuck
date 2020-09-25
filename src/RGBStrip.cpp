@@ -1,4 +1,3 @@
-#include "Arduino.h"
 #include "RGBStrip.h"
 
 RGBStrip::RGBStrip(int pin1, int pin2, int pin3)

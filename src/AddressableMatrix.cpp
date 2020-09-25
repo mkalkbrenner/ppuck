@@ -1,7 +1,4 @@
-#include <Arduino.h>
-#include <AddressableMatrix.h>
-#include <Adafruit_NeoPixel.h>
-#include <AddressableStrip.h>
+#include "AddressableMatrix.h"
 
 AddressableMatrix::AddressableMatrix(AddressableStrip* strip, int col, int row, int start)
 {

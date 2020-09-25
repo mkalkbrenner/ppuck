@@ -1,7 +1,4 @@
-#include <Arduino.h>
-#include <AddressableStrip.h>
-#include <Adafruit_NeoPixel.h>
-#include <pinduinoPins.h>
+#include "AddressableStrip.h"
 
 AddressableStrip::AddressableStrip(int num, int pin, pinduinoPins* pinState)
 {

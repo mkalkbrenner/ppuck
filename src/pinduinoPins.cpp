@@ -5,8 +5,7 @@
   Play more pinball!
 */
 
-#include <Arduino.h>
-#include <pinduinoPins.h>
+#include "pinduinoPins.h"
 
 
 //Note: are these being released as global vars into the parent program?
@@ -274,11 +273,14 @@ void pinduinoPins::update()
 		{
 			state = digitalRead(_pinsMega[i]);
 		}
-		else if (arduinoType=="Nano")
+		else if (arduinoType=="TNG")
 		{
-			state = digitalRead(_pinsNano[i]);
+			state = digitalRead(_pinsTNG[i]);
 		}
-		
+        else if (arduinoType=="Nano")
+        {
+            state = digitalRead(_pinsNano[i]);
+        }
 		
 		if (state == 1) 
 		{ //circuit being checked has been activated
@@ -296,9 +298,13 @@ void pinduinoPins::_initialize()
 		{
 			pinMode(_pinsMega[i], INPUT);
 		}
-		else if (arduinoType=="Nano")
+		else if (arduinoType=="TNG")
 		{
-			pinMode(_pinsNano[i], INPUT);
+			pinMode(_pinsTNG[i], INPUT);
 		}
+        else if (arduinoType=="Nano")
+        {
+            pinMode(_pinsNano[i], INPUT);
+        }
 	}
 }

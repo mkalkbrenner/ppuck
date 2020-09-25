@@ -1,5 +1,4 @@
-#include <Arduino.h>
-#include <DataPort.h>
+#include "DataPort.h"
 
 DataPort::DataPort(int pin)
 {

@@ -1,41 +1,29 @@
-#ifndef PINDUINO_TNG_SWITCHMATRIX_H_
-#define PINDUINO_TNG_SWITCHMATRIX_H_
+#ifndef SwitchMatrix_h
+#define SwitchMatrix_h
 
 #include <Arduino.h>
 
-#define MAX_HANDLERS 20
-
 class SwitchMatrix {
 public:
-    SwitchMatrix(int lastColToRead, int referenceCol);
+    SwitchMatrix();
 
-    virtual ~SwitchMatrix();
+    bool get(int row, int column);
 
-    void readSwitches();
-
-    bool get(int column, int row);
+    void reset(int row, int column);
 
     void reset();
 
-    void printbin(byte bin);
+    void print();
 
-    void dump();
+    void setLastRowToRead(int lastRowToRead);
 
-    int lastColToRead;
-    int referenceCol;
+    static void _readFirstRow();
+    static void _readNextRow();
 
-    volatile int col;
-    // 2 times 8 byte for row returns
-    // 2 arrays are used to detect changes
-    volatile byte rows[2][8];
-    // indicates which array to use
-    volatile int rowIndex;
-    volatile byte referenceColBuffer;
-    // 2 times 8 byte for row returns
-    // 2 arrays are used to detect changes
-    volatile byte rowsBuffer[8];
-    volatile bool rowsBufferReady;
-    volatile bool dumpSwitches;
+private:
+    volatile static int lastRowToRead;
+    volatile static int rowCounter;
+    volatile static byte rows[8];
 };
 
-#endif /* PINDUINO_TNG_SWITCHMATRIX_H_ */
+#endif

@@ -9,7 +9,7 @@
 
 #include <Arduino.h>
 #include <Adafruit_NeoPixel.h>
-#include <AddressableStrip.h>
+#include "AddressableStrip.h"
 
 class AddressableMatrix
 {
