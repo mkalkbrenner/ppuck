@@ -4,12 +4,12 @@ PUPSerial::PUPSerial() {
     Serial2.begin(115200, SERIAL_8N1);
 }
 
-void PUPSerial::postEvent(char msgtype, int msgvalue) {
-    write(PUP_POST_EVENT_COMMAND, msgtype, word(msgvalue));
+void PUPSerial::postEvent(char msgtype, int msgindex, int msgvalue) {
+    write(PUP_POST_EVENT_COMMAND, msgtype, word(msgindex), word(msgvalue));
 }
 
-void PUPSerial::customCommand(char msgtype, int msgvalue) {
-    write(PUP_CUSTOM_COMMAND, msgtype, word(msgvalue));
+void PUPSerial::customCommand(char msgtype, int msgindex, int msgvalue) {
+    write(PUP_CUSTOM_COMMAND msgtype, word(msgindex), word(msgvalue));
 }
 
 int PUPSerial::available() {
@@ -20,18 +20,17 @@ byte PUPSerial::read() {
     return Serial2.read();
 }
 
-void PUPSerial::write(byte command, char msgtype, word msgvalue) {
-    byte msg[6];
+void PUPwrite(byte command, char msgtype, word msgindex, word msgvalue) {
+    byte msg[8];
 
     msg[0] = command;
     msg[1] = msgtype;
-    msg[2] = highByte(msgvalue);
-    msg[3] = lowByte(msgvalue);
-    // two steps for the checksum:
-    // 1. bitwise OR of MSGTYPE and HighByte(MSGVALUE)
-    // 2. bitwise XOR of the result of 1 and LowByte(MSGVALUE)
-    msg[4] = (msg[1] | msg[2]) ^ msg[3];
-    msg[5] = PUP_EOF;
+    msg[2] = highByte(msgindex);
+    msg[3] = lowByte(msgindex);
+    msg[4] = highByte(msgvalue);
+    msg[5] = lowByte(msgvalue);
+    msg[6] = msg[0]^msg[1]^msg[2]^msg[3]^msg[4]^msg[5];
+    msg[7] = PUP_EOF;
 
-    Serial2.write(msg, 6);
+    Serial2.write(msg, 8);
 }

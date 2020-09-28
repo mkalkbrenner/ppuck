@@ -21,7 +21,6 @@ public:
 
     void setLastRowToRead(int lastRowToRead);
 
-    static void _readFirstRow();
     static void _readNextRow();
 
     volatile int lastRowToRead;

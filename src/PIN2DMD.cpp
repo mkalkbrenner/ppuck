@@ -29,7 +29,7 @@ void PIN2DMD::update() {
         eventCache[eventCacheCounter] = word(Serial1.read(), Serial1.read());
 
         if (forwardEnabled) {
-            pupSerial->postEvent(PUP_TYPE_DMD, eventCache[eventCacheCounter]);
+            pupSerial->postEvent(PUP_TYPE_DMD, eventCache[eventCacheCounter], PUP_VALUE_ON);
         }
 
         if (++eventCacheCounter > PIN2DMD_EVENT_CACHE_SIZE) {

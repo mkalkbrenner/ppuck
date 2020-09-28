@@ -15,8 +15,8 @@ SwitchMatrix::SwitchMatrix() {
         blockedMs[i] = 0L;
     }
 
-    attachInterrupt(digitalPinToInterrupt(2), SwitchMatrix::_readFirstRow, FALLING);
-    attachInterrupt(digitalPinToInterrupt(3), SwitchMatrix::_readNextRow, FALLING);
+    attachInterrupt(digitalPinToInterrupt(2), SwitchMatrix::_readNextRow, RISING);
+    attachInterrupt(digitalPinToInterrupt(3), SwitchMatrix::_readNextRow, RISING);
 }
 
 void SwitchMatrix::reset() {
@@ -67,17 +67,17 @@ bool SwitchMatrix::getOnce(int row, int column, int ms) {
     return state;
 }
 
-void SwitchMatrix::_readFirstRow() {
-    // Read row return at PIN 22 - 29.
-    switchMatrixInstance->rows[0] |= PINA;
-    switchMatrixInstance->rowCounter = 1;
-}
-
 void SwitchMatrix::_readNextRow() {
-    if (switchMatrixInstance->rowCounter > 0 && switchMatrixInstance->rowCounter <= switchMatrixInstance->lastRowToRead) {
+    if (digitalRead(53)) {
+        switchMatrixInstance->rowCounter = 0;
+    }
+
+    if (switchMatrixInstance->rowCounter >= 0 &&
+        switchMatrixInstance->rowCounter <= switchMatrixInstance->lastRowToRead
+    ) {
         // Read row return at PIN 22 - 29.
-        //self->rows[col++] |= PINA ^ B11111111;
-        switchMatrixInstance->rows[switchMatrixInstance->rowCounter++] |= PINA;
+        switchMatrixInstance->rows[switchMatrixInstance->rowCounter++] |= PINA ^ B11111111;
+        //switchMatrixInstance->rows[switchMatrixInstance->rowCounter++] |= PINA;
     }
 }
 

@@ -8,21 +8,22 @@
 #define PUP_EOF 13
 #define PUP_TYPE_DMD 68 // "D"
 #define PUP_TYPE_SWITCH 87 // "W"
+#define PUP_VALUE_ON 1
 
 class PUPSerial {
 public:
     PUPSerial();
 
-    void postEvent(char msgtype, int msgvalue);
+    void postEvent(char msgtype, int msgindex, int msgvalue);
 
-    void customCommand(char msgtype, int msgvalue);
+    void customCommand(char msgtype, int msgindex, int msgvalue);
 
     int available();
 
     byte read();
 
 protected:
-    void write(byte command, char msgtype, word msgvalue);
+    void write(byte command, char msgtype, word msgindex, word msgvalue);
 
 };
 

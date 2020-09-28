@@ -9,6 +9,7 @@
 
 #include <Arduino.h>
 #include <Adafruit_NeoPixel.h>
+
 #include "pinduinoPins.h"
 
 class AddressableStrip
