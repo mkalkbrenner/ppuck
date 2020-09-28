@@ -23,6 +23,8 @@ public:
     //Constructor with no parameters
     pinduino();
 
+    pinduino(String arduinoType);
+
     //Overloaded Constructor for addressable strips (arduinoType defaults to Mega)
     pinduino(int num1, int num2, int num3);
 

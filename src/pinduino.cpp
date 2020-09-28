@@ -11,6 +11,10 @@ pinduino::pinduino() {
     init(1, 1, 1, 1, "Nano");
 }
 
+pinduino::pinduino(String arduinoType) {
+    init(1, 1, 1, 1, arduinoType);
+}
+
 pinduino::pinduino(int aledNum1, String arduinoType) {
     init(aledNum1, 1, 1, 1, arduinoType);
 }
