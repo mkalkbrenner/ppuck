@@ -15,6 +15,7 @@
 #include "DataPort.h"
 #include "SwitchMatrix.h"
 #include "PIN2DMD.h"
+#include "PUPSerial.h"
 
 class pinduino {
 protected:
@@ -138,6 +139,9 @@ public:
 private:
     //internal object for monitoring pinball machine states
     pinduinoPins *_pinState;
+    SwitchMatrix *_switchMatrix;
+    PIN2DMD *_pin2Dmd;
+    PUPSerial *_pupSerial;
 
     //internal objects for RGB strip control`
     RGBStrip *RGB1;
