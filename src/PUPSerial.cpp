@@ -4,12 +4,12 @@ PUPSerial::PUPSerial() {
     Serial2.begin(115200, SERIAL_8N1);
 }
 
-void PUPSerial::postEvent(char msgtype, word msgvalue) {
-    write(PUP_POST_EVENT_COMMAND, msgtype, msgvalue);
+void PUPSerial::postEvent(char msgtype, int msgvalue) {
+    write(PUP_POST_EVENT_COMMAND, msgtype, word(msgvalue));
 }
 
-void PUPSerial::customCommand(char msgtype, word msgvalue) {
-    write(PUP_CUSTOM_COMMAND, msgtype, msgvalue);
+void PUPSerial::customCommand(char msgtype, int msgvalue) {
+    write(PUP_CUSTOM_COMMAND, msgtype, word(msgvalue));
 }
 
 int PUPSerial::available() {

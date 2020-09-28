@@ -3,11 +3,15 @@
 
 #include <Arduino.h>
 
+#define MAX_SWITCHES_BLOCKED 10
+
 class SwitchMatrix {
 public:
     SwitchMatrix();
 
     bool get(int row, int column);
+
+    bool getOnce(int row, int column, int ms);
 
     void reset(int row, int column);
 
@@ -20,10 +24,16 @@ public:
     static void _readFirstRow();
     static void _readNextRow();
 
+    volatile int lastRowToRead;
+    volatile int rowCounter;
+    volatile byte rows[8];
+
 private:
-    volatile static int lastRowToRead;
-    volatile static int rowCounter;
-    volatile static byte rows[8];
+    static SwitchMatrix* switchMatrixInstance;
+
+    int blockCounter;
+    word blocked[MAX_SWITCHES_BLOCKED];
+    unsigned long blockedMs[MAX_SWITCHES_BLOCKED];
 };
 
 #endif

@@ -13,9 +13,9 @@ class PUPSerial {
 public:
     PUPSerial();
 
-    void postEvent(char msgtype, word msgvalue);
+    void postEvent(char msgtype, int msgvalue);
 
-    void customCommand(char msgtype, word msgvalue);
+    void customCommand(char msgtype, int msgvalue);
 
     int available();
 

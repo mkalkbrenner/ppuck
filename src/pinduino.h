@@ -164,5 +164,4 @@ private:
     void init(int aledNum1, int aledNum2, int aledNum3, int aledNum4, String arduinoType);
 };
 
-
 #endif
