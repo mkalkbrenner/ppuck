@@ -42,6 +42,8 @@ public:
 
     PIN2DMD *pin2Dmd();
 
+    PUPSerial *pupSerial();
+
     //functions for controlling 12V RGB strips
     RGBStrip *rgbLED1();
 
@@ -134,8 +136,6 @@ public:
 private:
     //internal object for monitoring pinball machine states
     pinduinoPins *_pinState;
-    SwitchMatrix *_switchMatrix;
-    PIN2DMD *_pin2dmd;
 
     //internal objects for RGB strip control`
     RGBStrip *RGB1;

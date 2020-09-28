@@ -29,7 +29,7 @@ void PIN2DMD::update() {
         eventCache[eventCacheCounter] = word(Serial1.read(), Serial1.read());
 
         if (forwardEnabled) {
-            Serial2.write(eventCache[eventCacheCounter]);
+            pupSerial->postEvent(PUP_TYPE_DMD, eventCache[eventCacheCounter]);
         }
 
         if (++eventCacheCounter > PIN2DMD_EVENT_CACHE_SIZE) {
@@ -38,14 +38,9 @@ void PIN2DMD::update() {
     }
 }
 
-void PIN2DMD::forward(bool enable) {
-    forwardEnabled = enable;
-    if (forwardEnabled) {
-        Serial2.begin(57600);
-    }
-    else {
-        Serial2.end();
-    }
+void PIN2DMD::forwardToPUP(PUPSerial *pupSerial) {
+    forwardEnabled = true;
+    this->pupSerial = pupSerial;
 }
 
 

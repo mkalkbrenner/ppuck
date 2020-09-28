@@ -2,6 +2,7 @@
 #define PIN2DMD_h
 
 #include <Arduino.h>
+#include "PUPSerial.h"
 
 #define PIN2DMD_EVENT_CACHE_SIZE 10
 
@@ -19,13 +20,15 @@ public:
 
     void update();
 
-    void forward(bool enable);
+    void forwardToPUP(PUPSerial *pupSerial);
 
 private:
     uint16_t eventCache[PIN2DMD_EVENT_CACHE_SIZE];
     int eventCacheCounter;
 
     bool forwardEnabled;
+    PUPSerial *pupSerial;
+
 };
 
 #endif

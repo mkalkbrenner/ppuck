@@ -58,8 +58,6 @@ void pinduino::init(int aledNum1, int aledNum2, int aledNum3, int aledNum4, Stri
         DATAPORT2 = new DataPort(68);
         DATAPORT3 = new DataPort(67);
         DATAPORT4 = new DataPort(66);
-        _switchMatrix = new SwitchMatrix();
-        _pin2dmd = new PIN2DMD();
     } else if (arduinoType == "Nano") {
         ALED1 = new AddressableStrip(aledNum1, 10, _pinState);
         ALED2 = new AddressableStrip(aledNum2, 11, _pinState);
@@ -76,13 +74,18 @@ pinduinoPins *pinduino::pinState() {
     return _pinState;
 }
 
-SwitchMatrix *pinduino::switchMatrix(int lastRowToRead = 8) {
-    _switchMatrix->setLastRowToRead(lastRowToRead);
-    return _switchMatrix;
+SwitchMatrix *pinduino::switchMatrix(int lastRowToRead) {
+    SwitchMatrix *switchMatrix = new SwitchMatrix();
+    switchMatrix->setLastRowToRead(lastRowToRead);
+    return switchMatrix;
 }
 
 PIN2DMD *pinduino::pin2Dmd() {
-    return _pin2dmd;
+    return new PIN2DMD();
+}
+
+PUPSerial *pinduino::pupSerial() {
+    return new PUPSerial();
 }
 
 RGBStrip *pinduino::rgbLED1() {
