@@ -9,7 +9,7 @@ void PUPSerial::postEvent(char msgtype, int msgindex, int msgvalue) {
 }
 
 void PUPSerial::customCommand(char msgtype, int msgindex, int msgvalue) {
-    write(PUP_CUSTOM_COMMAND msgtype, word(msgindex), word(msgvalue));
+    write(PUP_CUSTOM_COMMAND, msgtype, word(msgindex), word(msgvalue));
 }
 
 int PUPSerial::available() {
@@ -20,7 +20,7 @@ byte PUPSerial::read() {
     return Serial2.read();
 }
 
-void PUPwrite(byte command, char msgtype, word msgindex, word msgvalue) {
+void write(byte command, char msgtype, word msgindex, word msgvalue) {
     byte msg[8];
 
     msg[0] = command;
