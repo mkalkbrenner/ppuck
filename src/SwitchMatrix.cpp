@@ -20,7 +20,8 @@ SwitchMatrix::SwitchMatrix() {
 }
 
 void SwitchMatrix::reset() {
-    rowCounter = 0;
+    columnCounter = -1;
+
     for (int i = 0; i < lastRowToRead; i++) {
         rows[i] = B00000000;
     }
@@ -31,7 +32,7 @@ void SwitchMatrix::reset(int row, int column) {
 }
 
 void SwitchMatrix::setLastRowToRead(int last) {
-    lastRowToRead = --last;
+    lastRowToRead = last - 1;
 }
 
 bool SwitchMatrix::get(int row, int column) {
@@ -68,16 +69,17 @@ bool SwitchMatrix::getOnce(int row, int column, int ms) {
 }
 
 void SwitchMatrix::_readNextRow() {
-    if (digitalRead(53)) {
-        switchMatrixInstance->rowCounter = 0;
+    if (!digitalRead(53)) {
+        switchMatrixInstance->columnCounter = 0;
     }
 
-    if (switchMatrixInstance->rowCounter >= 0 &&
-        switchMatrixInstance->rowCounter <= switchMatrixInstance->lastRowToRead
+    if (switchMatrixInstance->columnCounter >= 0 &&
+        switchMatrixInstance->columnCounter <= switchMatrixInstance->lastRowToRead
     ) {
         // Read row return at PIN 22 - 29.
-        switchMatrixInstance->rows[switchMatrixInstance->rowCounter++] |= PINA ^ B11111111;
-        //switchMatrixInstance->rows[switchMatrixInstance->rowCounter++] |= PINA;
+        switchMatrixInstance->rows[switchMatrixInstance->columnCounter] |= PINA ^ B11111111;
+        //switchMatrixInstance->rows[switchMatrixInstance->columnCounter] |= PINA;
+        switchMatrixInstance->columnCounter++;
     }
 }
 

@@ -24,7 +24,7 @@ public:
     static void _readNextRow();
 
     volatile int lastRowToRead;
-    volatile int rowCounter;
+    volatile int columnCounter;
     volatile byte rows[8];
 
 private:

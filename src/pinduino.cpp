@@ -81,8 +81,7 @@ pinduinoPins *pinduino::pinState() {
     return _pinState;
 }
 
-SwitchMatrix *pinduino::switchMatrix(int lastRowToRead) {
-    _switchMatrix->setLastRowToRead(lastRowToRead);
+SwitchMatrix *pinduino::switchMatrix() {
     return _switchMatrix;
 }
 
