@@ -42,7 +42,7 @@ public:
     //initialize pins for communication to/from arduino
     pinduinoPins *pinState();
 
-    SwitchMatrix *switchMatrix(int lastRowToRead = 8);
+    SwitchMatrix *switchMatrix();
 
     PIN2DMD *pin2Dmd();
 
