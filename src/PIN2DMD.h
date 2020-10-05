@@ -10,6 +10,8 @@ class PIN2DMD {
 public:
     PIN2DMD();
 
+    void setSerial(HardwareSerial &reference);
+
     bool get(byte device, byte command);
 
     void reset(byte device, byte command);
@@ -28,6 +30,8 @@ private:
 
     bool forwardEnabled;
     PUPSerial *pupSerial;
+
+    Stream *hwSerial;
 
 };
 

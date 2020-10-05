@@ -3,7 +3,11 @@
 PIN2DMD::PIN2DMD() {
     forwardEnabled = false;
     reset();
-    Serial1.begin(57600);
+}
+
+void PIN2DMD::setSerial(HardwareSerial &reference) {
+    hwSerial = &reference;
+    ((HardwareSerial*) hwSerial)->begin(57600);
 }
 
 void PIN2DMD::reset() {
@@ -24,16 +28,24 @@ bool PIN2DMD::get(byte device, byte command) {
 }
 
 void PIN2DMD::update() {
-    while (Serial1.available() > 1) {
-        // read two incoming bytes
-        eventCache[eventCacheCounter] = word(Serial1.read(), Serial1.read());
+    if (hwSerial->available() > 2) {
+        byte deviceByte = hwSerial->read();
+        if (deviceByte != 0) {
+            byte eventByte = hwSerial->read();
+            if (eventByte != 0) {
+                byte nullByte = hwSerial->read();
+                if (nullByte == 0) {
+                    eventCache[eventCacheCounter] = word(deviceByte - 100, eventByte);
 
-        if (forwardEnabled) {
-            pupSerial->postEvent(PUP_TYPE_DMD, eventCache[eventCacheCounter], PUP_VALUE_ON);
-        }
+                    if (forwardEnabled) {
+                        pupSerial->postEvent(PUP_TYPE_DMD, eventCache[eventCacheCounter], PUP_VALUE_ON);
+                    }
 
-        if (++eventCacheCounter > PIN2DMD_EVENT_CACHE_SIZE) {
-            eventCacheCounter = 0;
+                    if (++eventCacheCounter > PIN2DMD_EVENT_CACHE_SIZE) {
+                        eventCacheCounter = 0;
+                    }
+                }
+            }
         }
     }
 }

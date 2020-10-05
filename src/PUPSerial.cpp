@@ -1,8 +1,13 @@
 #include "PUPSerial.h"
 
 PUPSerial::PUPSerial() {
-    Serial2.begin(115200, SERIAL_8N1);
 }
+
+void PUPSerial::setSerial(HardwareSerial &reference) {
+    hwSerial = &reference;
+    ((HardwareSerial*) hwSerial)->begin(115200, SERIAL_8N1);
+}
+
 
 void PUPSerial::postEvent(char msgtype, int msgindex, int msgvalue) {
     write(PUP_POST_EVENT_COMMAND, msgtype, word(msgindex), word(msgvalue));
@@ -13,14 +18,14 @@ void PUPSerial::customCommand(char msgtype, int msgindex, int msgvalue) {
 }
 
 int PUPSerial::available() {
-    return Serial2.available();
+    return hwSerial->available();
 }
 
 byte PUPSerial::read() {
-    return Serial2.read();
+    return hwSerial->read();
 }
 
-void write(byte command, char msgtype, word msgindex, word msgvalue) {
+void PUPSerial::write(byte command, char msgtype, word msgindex, word msgvalue) {
     byte msg[8];
 
     msg[0] = command;
@@ -32,5 +37,5 @@ void write(byte command, char msgtype, word msgindex, word msgvalue) {
     msg[6] = msg[0]^msg[1]^msg[2]^msg[3]^msg[4]^msg[5];
     msg[7] = PUP_EOF;
 
-    Serial2.write(msg, 8);
+    hwSerial->write(msg, 8);
 }

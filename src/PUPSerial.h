@@ -14,6 +14,8 @@ class PUPSerial {
 public:
     PUPSerial();
 
+    void setSerial(HardwareSerial &reference);
+
     void postEvent(char msgtype, int msgindex, int msgvalue);
 
     void customCommand(char msgtype, int msgindex, int msgvalue);
@@ -25,6 +27,7 @@ public:
 protected:
     void write(byte command, char msgtype, word msgindex, word msgvalue);
 
+    Stream *hwSerial;
 };
 
 #endif
