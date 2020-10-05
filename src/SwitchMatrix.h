@@ -1,3 +1,10 @@
+/*
+  SwitchMatrix.h - Library for pinduino shield for Arduinos.
+  Created by Markus Kalkbrenner, 2020.
+
+  Play more pinball!
+*/
+
 #ifndef SwitchMatrix_h
 #define SwitchMatrix_h
 

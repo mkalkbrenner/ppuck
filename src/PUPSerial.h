@@ -1,3 +1,10 @@
+/*
+  PUPSerial.h - Library for pinduino shield for Arduinos.
+  Created by Markus Kalkbrenner, 2020.
+
+  Play more pinball!
+*/
+
 #ifndef PUPSERIAL_h
 #define PUPSERIAL_h
 

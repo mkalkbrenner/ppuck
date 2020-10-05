@@ -1,3 +1,10 @@
+/*
+  PIN2DMD.h - Library for pinduino shield for Arduinos.
+  Created by Markus Kalkbrenner, 2020.
+
+  Play more pinball!
+*/
+
 #ifndef PIN2DMD_h
 #define PIN2DMD_h
 
