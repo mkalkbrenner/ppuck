@@ -17,6 +17,22 @@ void PUPSerial::customCommand(char msgtype, int msgindex, int msgvalue) {
     write(PUP_CUSTOM_COMMAND, msgtype, word(msgindex), word(msgvalue));
 }
 
+void PUPSerial::setVolume(int volume) {
+    write(PUP_CUSTOM_COMMAND, PUP_CUSTOM_VOLUME, word(0), word(volume));
+}
+
+void PUPSerial::startBatch(int id) {
+    write(PUP_CUSTOM_COMMAND, PUP_CUSTOM_BATCH, word(0), word(id));
+}
+
+void PUPSerial::restart() {
+    write(PUP_CUSTOM_COMMAND, PUP_CUSTOM_RESTART, word(0), word(1));
+}
+
+void PUPSerial::shutdown() {
+    write(PUP_CUSTOM_COMMAND, PUP_CUSTOM_SHUTDOWN, word(0), word(1));
+}
+
 int PUPSerial::available() {
     return hwSerial->available();
 }

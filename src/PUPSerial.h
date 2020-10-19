@@ -16,6 +16,10 @@
 #define PUP_TYPE_DMD 68 // "D"
 #define PUP_TYPE_SWITCH 87 // "W"
 #define PUP_VALUE_ON 1
+#define PUP_CUSTOM_VOLUME 86 // "V"
+#define PUP_CUSTOM_BATCH 66 // "B"
+#define PUP_CUSTOM_RESTART 82 // "R"
+#define PUP_CUSTOM_SHUTDOWN 83 // "S"
 
 class PUPSerial {
 public:
@@ -26,6 +30,17 @@ public:
     void postEvent(char msgtype, int msgindex, int msgvalue);
 
     void customCommand(char msgtype, int msgindex, int msgvalue);
+
+    void setVolume(int volume);
+
+    /**
+     * Starts "id".bat in the "pinupsystem\launch" folder
+     */
+    void startBatch(int id);
+
+    void restart();
+
+    void shutdown();
 
     int available();
 
