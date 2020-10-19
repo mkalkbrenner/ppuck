@@ -6,6 +6,20 @@ SwitchMatrix* SwitchMatrix::switchMatrixInstance = NULL;
 SwitchMatrix::SwitchMatrix() {
     switchMatrixInstance = this;
 
+    pinMode(2, INPUT);
+    pinMode(3, INPUT);
+
+    pinMode(22, INPUT);
+    pinMode(23, INPUT);
+    pinMode(24, INPUT);
+    pinMode(25, INPUT);
+    pinMode(26, INPUT);
+    pinMode(27, INPUT);
+    pinMode(28, INPUT);
+    pinMode(29, INPUT);
+
+    pinMode(53, INPUT);
+
     setLastRowToRead(8);
 	reset();
 
