@@ -18,7 +18,7 @@ SwitchMatrix::SwitchMatrix() {
     pinMode(28, INPUT);
     pinMode(29, INPUT);
 
-    pinMode(53, INPUT);
+    pinMode(49, INPUT);
 
     setLastRowToRead(8);
 	reset();

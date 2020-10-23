@@ -1,14 +1,14 @@
-/*
-  ppuck.cpp - Library for ppuck shield for Arduinos.
-  Created by Eric Lyons and Wes Sparks, 2015.
-  Released into the public domain.
-  Play more pinball!
-*/
+/**
+ * ppuck.cpp - Library for Pinball Power-Up Controller.
+ * Created by Markus Kalkbrenner, 2020.
+ * Parts based on pindion by Eric Lyons and Wes Sparks, 2015.
+ * Play more pinball!
+ */
 
 #include "ppuck.h"
 
 ppuck::ppuck() {
-    init(1, 1, 1, 1, "Nano");
+    init(1, 1, 1, 1, "PPUC-1.0");
 }
 
 ppuck::ppuck(String arduinoType) {
@@ -24,7 +24,7 @@ ppuck::ppuck(int aledNum1, int aledNum2, String arduinoType) {
 }
 
 ppuck::ppuck(int aledNum1, int aledNum2, int aledNum3) {
-    init(aledNum1, aledNum2, aledNum3, 1, "Nano");
+    init(aledNum1, aledNum2, aledNum3, 1, "PPUC-1.0");
 }
 
 ppuck::ppuck(int aledNum1, int aledNum2, int aledNum3, String arduinoType) {
@@ -38,20 +38,8 @@ ppuck::ppuck(int aledNum1, int aledNum2, int aledNum3, int aledNum4, String ardu
 void ppuck::init(int aledNum1, int aledNum2, int aledNum3, int aledNum4, String arduinoType) {
     _pinState = new pinduinoPins(arduinoType);
 
-    if (arduinoType == "Mega") {
-        ALED1 = new AddressableStrip(aledNum1, 69, _pinState); // A15 (analog port):  Changed to a number for compiling compatibility when board is set to Nano
-        ALED2 = new AddressableStrip(aledNum2, 68, _pinState); // A14
-        ALED3 = new AddressableStrip(aledNum3, 67, _pinState); // A13
-        RGB1 = new RGBStrip(11, 12, 13); // pins 11,12,13
-        RGB2 = new RGBStrip(8, 9, 10); // pins 8,9,10
-        RGB3 = new RGBStrip(5, 6, 7); // pins 5,6,7
-        RGB4 = new RGBStrip(2, 3, 4); // pins 2,3,4
-        DATAPORT1 = new DataPort(69);
-        DATAPORT2 = new DataPort(68);
-        DATAPORT3 = new DataPort(67);
-        DATAPORT3 = new DataPort(67);
-    } else if (arduinoType == "TNG") {
-        ALED1 = new AddressableStrip(aledNum1, 69, _pinState); // A15 (analog port):  Changed to a number for compiling compatibility when board is set to Nano
+    if (arduinoType == "PPUC-1.0") {
+        ALED1 = new AddressableStrip(aledNum1, 69, _pinState); // A15
         ALED2 = new AddressableStrip(aledNum2, 68, _pinState); // A14
         ALED3 = new AddressableStrip(aledNum3, 67, _pinState); // A13
         ALED4 = new AddressableStrip(aledNum4, 66, _pinState); // A12
@@ -65,12 +53,6 @@ void ppuck::init(int aledNum1, int aledNum2, int aledNum3, int aledNum4, String 
         _switchMatrix = new SwitchMatrix();
         _pin2Dmd = new PIN2DMD();
         _pupSerial = new PUPSerial();
-    } else if (arduinoType == "Nano") {
-        ALED1 = new AddressableStrip(aledNum1, 10, _pinState);
-        ALED2 = new AddressableStrip(aledNum2, 11, _pinState);
-        ALED3 = new AddressableStrip(aledNum3, 0, _pinState);
-        DATAPORT1 = new DataPort(10);
-        DATAPORT2 = new DataPort(11);
     } else {
         Serial.print("Unsupported Arduino board: ");
         Serial.println(arduinoType);
