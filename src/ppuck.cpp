@@ -1,41 +1,41 @@
 /*
-  pinduino.cpp - Library for pinduino shield for Arduinos.
+  ppuck.cpp - Library for ppuck shield for Arduinos.
   Created by Eric Lyons and Wes Sparks, 2015.
   Released into the public domain.
   Play more pinball!
 */
 
-#include "pinduino.h"
+#include "ppuck.h"
 
-pinduino::pinduino() {
+ppuck::ppuck() {
     init(1, 1, 1, 1, "Nano");
 }
 
-pinduino::pinduino(String arduinoType) {
+ppuck::ppuck(String arduinoType) {
     init(1, 1, 1, 1, arduinoType);
 }
 
-pinduino::pinduino(int aledNum1, String arduinoType) {
+ppuck::ppuck(int aledNum1, String arduinoType) {
     init(aledNum1, 1, 1, 1, arduinoType);
 }
 
-pinduino::pinduino(int aledNum1, int aledNum2, String arduinoType) {
+ppuck::ppuck(int aledNum1, int aledNum2, String arduinoType) {
     init(aledNum1, aledNum2, 1, 1, arduinoType);
 }
 
-pinduino::pinduino(int aledNum1, int aledNum2, int aledNum3) {
+ppuck::ppuck(int aledNum1, int aledNum2, int aledNum3) {
     init(aledNum1, aledNum2, aledNum3, 1, "Nano");
 }
 
-pinduino::pinduino(int aledNum1, int aledNum2, int aledNum3, String arduinoType) {
+ppuck::ppuck(int aledNum1, int aledNum2, int aledNum3, String arduinoType) {
     init(aledNum1, aledNum2, aledNum3, 1, arduinoType);
 }
 
-pinduino::pinduino(int aledNum1, int aledNum2, int aledNum3, int aledNum4, String arduinoType) {
+ppuck::ppuck(int aledNum1, int aledNum2, int aledNum3, int aledNum4, String arduinoType) {
     init(aledNum1, aledNum2, aledNum3, aledNum4, arduinoType);
 }
 
-void pinduino::init(int aledNum1, int aledNum2, int aledNum3, int aledNum4, String arduinoType) {
+void ppuck::init(int aledNum1, int aledNum2, int aledNum3, int aledNum4, String arduinoType) {
     _pinState = new pinduinoPins(arduinoType);
 
     if (arduinoType == "Mega") {
@@ -77,77 +77,77 @@ void pinduino::init(int aledNum1, int aledNum2, int aledNum3, int aledNum4, Stri
     }
 }
 
-pinduinoPins *pinduino::pinState() {
+pinduinoPins *ppuck::pinState() {
     return _pinState;
 }
 
-SwitchMatrix *pinduino::switchMatrix() {
+SwitchMatrix *ppuck::switchMatrix() {
     return _switchMatrix;
 }
 
-PIN2DMD *pinduino::pin2Dmd() {
+PIN2DMD *ppuck::pin2Dmd() {
     return _pin2Dmd;
 }
 
-PUPSerial *pinduino::pupSerial() {
+PUPSerial *ppuck::pupSerial() {
     return _pupSerial;
 }
 
-RGBStrip *pinduino::rgbLED1() {
+RGBStrip *ppuck::rgbLED1() {
     return RGB1;
 }
 
-RGBStrip *pinduino::rgbLED2() {
+RGBStrip *ppuck::rgbLED2() {
     return RGB2;
 }
 
-RGBStrip *pinduino::rgbLED3() {
+RGBStrip *ppuck::rgbLED3() {
     return RGB3;
 }
 
 
-RGBStrip *pinduino::rgbLED4() {
+RGBStrip *ppuck::rgbLED4() {
     return RGB4;
 }
 
-AddressableStrip *pinduino::adrLED1() {
+AddressableStrip *ppuck::adrLED1() {
     return ALED1;
 }
 
-AddressableStrip *pinduino::adrLED2() {
+AddressableStrip *ppuck::adrLED2() {
     return ALED2;
 }
 
-AddressableStrip *pinduino::adrLED3() {
+AddressableStrip *ppuck::adrLED3() {
     return ALED3;
 }
 
-AddressableStrip *pinduino::adrLED4() {
+AddressableStrip *ppuck::adrLED4() {
     return ALED4;
 }
 
-AddressableMatrix *pinduino::adrMatrix(AddressableStrip *adr, int col, int row, int start) {
+AddressableMatrix *ppuck::adrMatrix(AddressableStrip *adr, int col, int row, int start) {
     return new AddressableMatrix(adr, col, row, start);
 }
 
-DataPort *pinduino::port1() {
+DataPort *ppuck::port1() {
     return DATAPORT1;
 }
 
-DataPort *pinduino::port2() {
+DataPort *ppuck::port2() {
     return DATAPORT2;
 }
 
-DataPort *pinduino::port3() {
+DataPort *ppuck::port3() {
     return DATAPORT3;
 }
 
-DataPort *pinduino::port4() {
+DataPort *ppuck::port4() {
     return DATAPORT4;
 }
 
 //fade out all addressable strips
-void pinduino::fadeOutAllAdr(float time) {
+void ppuck::fadeOutAllAdr(float time) {
     time = time / 256;
     for (int i = 1; i < 255; i++) {
         _pinState->update();
@@ -167,12 +167,12 @@ void pinduino::fadeOutAllAdr(float time) {
 //note that strip colors must be previously set.  
 //E.g.,:  ALED1->color("red", 1);  //brightness of 1
 
-void pinduino::colorAllAdrRGB(int r, int g, int b) {
+void ppuck::colorAllAdrRGB(int r, int g, int b) {
     ALED1->colorRGB(r, g, b);
     ALED2->colorRGB(r, g, b);
 }
 
-void pinduino::colorAllAdr(String color) {
+void ppuck::colorAllAdr(String color) {
     int r = 0;
     int g = 0;
     int b = 0;
@@ -180,7 +180,7 @@ void pinduino::colorAllAdr(String color) {
     colorAllAdrRGB(r, g, b);
 }
 
-void pinduino::fadeInAllAdrRGB(int r, int g, int b, float time) {
+void ppuck::fadeInAllAdrRGB(int r, int g, int b, float time) {
     time = time / 256;
     ALED1->strip()->setBrightness(1);
     ALED1->strip()->show();
@@ -197,7 +197,7 @@ void pinduino::fadeInAllAdrRGB(int r, int g, int b, float time) {
     }
 }
 
-void pinduino::fadeInAllAdr(String color, float time) {
+void ppuck::fadeInAllAdr(String color, float time) {
     int r = 0;
     int g = 0;
     int b = 0;
@@ -205,7 +205,7 @@ void pinduino::fadeInAllAdr(String color, float time) {
     fadeInAllAdrRGB(r, g, b, time);
 }
 
-void pinduino::fadeAllAdrRGB2RGB(float r1, float g1, float b1, float r2, float g2, float b2, float time) {
+void ppuck::fadeAllAdrRGB2RGB(float r1, float g1, float b1, float r2, float g2, float b2, float time) {
     time = time / 256;
     ALED1->colorRGB(r1, g1, b1, 250);
     ALED2->colorRGB(r1, g1, b1, 250);
@@ -235,7 +235,7 @@ void pinduino::fadeAllAdrRGB2RGB(float r1, float g1, float b1, float r2, float g
     }
 }
 
-void pinduino::fadeAllAdrColor2Color(String color1, String color2, float time) {
+void ppuck::fadeAllAdrColor2Color(String color1, String color2, float time) {
     int r1, g1, b1;
     int r2, g2, b2;
     ALED1->color2RGB(color1, r1, g1, b1);
@@ -243,8 +243,7 @@ void pinduino::fadeAllAdrColor2Color(String color1, String color2, float time) {
     fadeAllAdrRGB2RGB(r1, g1, b1, r2, g2, b2, time);
 }
 
-void
-pinduino::chaseAllAdr2RGB(float r1, float g1, float b1, float r2, float g2, float b2, float span, int time, int dir) {
+void ppuck::chaseAllAdr2RGB(float r1, float g1, float b1, float r2, float g2, float b2, float span, int time, int dir) {
     int pos;
     int numP = ALED1->strip()->numPixels();
     if (ALED2->strip()->numPixels() > numP) { numP = ALED2->strip()->numPixels(); }
@@ -282,7 +281,7 @@ pinduino::chaseAllAdr2RGB(float r1, float g1, float b1, float r2, float g2, floa
     }
 }
 
-void pinduino::chaseAllAdr2Color(String color1, String color2, float span, int time, int dir) {
+void ppuck::chaseAllAdr2Color(String color1, String color2, float span, int time, int dir) {
     int r1, g1, b1;
     int r2, g2, b2;
     ALED1->color2RGB(color1, r1, g1, b1);
@@ -290,7 +289,7 @@ void pinduino::chaseAllAdr2Color(String color1, String color2, float span, int t
     chaseAllAdr2RGB(r1, g1, b1, r2, g2, b2, span, time, dir);
 }
 
-void pinduino::chaseAllAdr2RGBFromPoint(int pos, float r1, float g1, float b1, float r2, float g2, float b2, int span,
+void ppuck::chaseAllAdr2RGBFromPoint(int pos, float r1, float g1, float b1, float r2, float g2, float b2, int span,
                                         int time) {
     int numP = ALED1->strip()->numPixels();
     if (ALED2->strip()->numPixels() > numP) { numP = ALED2->strip()->numPixels(); }
@@ -344,7 +343,7 @@ void pinduino::chaseAllAdr2RGBFromPoint(int pos, float r1, float g1, float b1, f
     }
 }
 
-void pinduino::testRGBStrip(RGBStrip *strip) {
+void ppuck::testRGBStrip(RGBStrip *strip) {
     strip->set("red");
     delay(300);
     strip->set("green");
@@ -389,24 +388,24 @@ void pinduino::testRGBStrip(RGBStrip *strip) {
     delay(500);
 }
 
-void pinduino::testRGBStrip1() {
+void ppuck::testRGBStrip1() {
     testRGBStrip(RGB1);
 }
 
-void pinduino::testRGBStrip2() {
+void ppuck::testRGBStrip2() {
     testRGBStrip(RGB2);
 }
 
-void pinduino::testRGBStrip3() {
+void ppuck::testRGBStrip3() {
     testRGBStrip(RGB3);
 }
 
-void pinduino::testRGBStrip4() {
+void ppuck::testRGBStrip4() {
     testRGBStrip(RGB4);
 }
 
 
-void pinduino::testSpeakerAdrLED(AddressableStrip *strip) {
+void ppuck::testSpeakerAdrLED(AddressableStrip *strip) {
     //chase2RGBCont(float r1, float g1, float b1, float r2, float g2, float b2, float span, int time, int dir, int startLED, int endLED)
 
     // Slow Red/Blue
@@ -475,13 +474,13 @@ void pinduino::testSpeakerAdrLED(AddressableStrip *strip) {
 
 }
 
-void pinduino::testSpeakerAdrLED1() {
+void ppuck::testSpeakerAdrLED1() {
     testSpeakerAdrLED(ALED1);
 
 }
 
 
-void pinduino::testAdrLED(AddressableStrip *strip) {
+void ppuck::testAdrLED(AddressableStrip *strip) {
     strip->chase("green", 10, 10, 1);
     strip->chase("blue", 10, 10, -1);
     strip->chase("red", 10, 10, 1);
@@ -568,7 +567,7 @@ void pinduino::testAdrLED(AddressableStrip *strip) {
     delay(200);
 }
 
-void pinduino::testAdrLEDAlpha(AddressableStrip *strip) {
+void ppuck::testAdrLEDAlpha(AddressableStrip *strip) {
     strip->bullet("red", 10, 1, 1);
     strip->bullet("red", 10, 1, -1);
     strip->bullet("blue", 10, 1, 1);
@@ -586,34 +585,34 @@ void pinduino::testAdrLEDAlpha(AddressableStrip *strip) {
 
 }
 
-void pinduino::testAdrLED1() {
+void ppuck::testAdrLED1() {
     testAdrLED(ALED1);
 }
 
-void pinduino::testAdrLED2() {
+void ppuck::testAdrLED2() {
     testAdrLED(ALED2);
 }
 
-void pinduino::testAdrLED3() {
+void ppuck::testAdrLED3() {
     testAdrLED(ALED3);
 }
 
-void pinduino::testAdrLED4() {
+void ppuck::testAdrLED4() {
     testAdrLED(ALED4);
 }
 
-void pinduino::testAdrLED1Alpha() {
+void ppuck::testAdrLED1Alpha() {
     testAdrLEDAlpha(ALED1);
 }
 
-void pinduino::testAdrLED2Alpha() {
+void ppuck::testAdrLED2Alpha() {
     testAdrLEDAlpha(ALED2);
 }
 
-void pinduino::testAdrLED3Alpha() {
+void ppuck::testAdrLED3Alpha() {
     testAdrLEDAlpha(ALED3);
 }
 
-void pinduino::testAdrLED4Alpha() {
+void ppuck::testAdrLED4Alpha() {
     testAdrLEDAlpha(ALED4);
 }

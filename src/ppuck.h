@@ -1,11 +1,5 @@
-/*
-  pinduino.h - Library for pinduino shield for Arduinos.
-  Created by Eric Lyons and Wes Sparks, 2015.
-  Released into the public domain.
-  Play more pinball!
-*/
-#ifndef pinduino_h
-#define pinduino_h
+#ifndef ppuck_h
+#define ppuck_h
 
 #include <Arduino.h>
 
@@ -18,26 +12,26 @@
 #include "PIN2DMD.h"
 #include "PUPSerial.h"
 
-class pinduino {
+class ppuck {
 protected:
 
 public:
     //Constructor with no parameters
-    pinduino();
+    ppuck();
 
-    pinduino(String arduinoType);
+    ppuck(String arduinoType);
 
     //Overloaded Constructor for addressable strips (arduinoType defaults to Mega)
-    pinduino(int num1, int num2, int num3);
+    ppuck(int num1, int num2, int num3);
 
     //Overloaded Constructor for addressable strips
-    pinduino(int num1, String arduinoType);
+    ppuck(int num1, String arduinoType);
 
-    pinduino(int num1, int num2, String arduinoType);
+    ppuck(int num1, int num2, String arduinoType);
 
-    pinduino(int num1, int num2, int num3, String arduinoType);
+    ppuck(int num1, int num2, int num3, String arduinoType);
 
-    pinduino(int num1, int num2, int num3, int num4, String arduinoType);
+    ppuck(int num1, int num2, int num3, int num4, String arduinoType);
 
     //initialize pins for communication to/from arduino
     pinduinoPins *pinState();
