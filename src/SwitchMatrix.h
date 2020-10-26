@@ -21,6 +21,10 @@ class SwitchMatrix {
 public:
     SwitchMatrix(EventDispatcher* eD);
 
+    bool get(byte number);
+
+    bool getOnce(byte number, int ms);
+
     bool get(byte row, byte column);
 
     bool getOnce(byte row, byte column, int ms);
@@ -33,7 +37,7 @@ public:
 
     void setLastRowToRead(byte lastRowToRead);
 
-    void registerSwitch(byte row, byte column, byte number);
+    void registerSwitchAsEvent(byte row, byte column, byte number);
 
     static void _readNextRow();
 

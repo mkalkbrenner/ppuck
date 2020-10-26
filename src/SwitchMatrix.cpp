@@ -10,6 +10,7 @@ SwitchMatrix::SwitchMatrix(EventDispatcher* ed) {
 
     pinMode(2, INPUT);
     pinMode(3, INPUT);
+    pinMode(4, INPUT);
 
     pinMode(22, INPUT);
     pinMode(23, INPUT);
@@ -19,8 +20,6 @@ SwitchMatrix::SwitchMatrix(EventDispatcher* ed) {
     pinMode(27, INPUT);
     pinMode(28, INPUT);
     pinMode(29, INPUT);
-
-    pinMode(53, INPUT);
 
     setLastRowToRead(8);
 	reset();
@@ -51,11 +50,21 @@ void SwitchMatrix::setLastRowToRead(byte last) {
     lastRowToRead = last - 1;
 }
 
-void SwitchMatrix::registerSwitch(byte row, byte column, byte number) {
+void SwitchMatrix::registerSwitchAsEvent(byte row, byte column, byte number) {
     if (registeredSwitchCounter < (MAX_SWITCHES_REGISTERED -1)) {
         registeredSwitchRowCol[++registeredSwitchCounter] = word(row, column);
         registeredSwitchNum[registeredSwitchCounter] = number;
     }
+}
+
+bool SwitchMatrix::get(byte number) {
+    for (byte i = 0; i <= registeredSwitchCounter; i++) {
+        if (number == registeredSwitchNum[i]) {
+            return get(highByte(registeredSwitchRowCol[i]), lowByte(registeredSwitchRowCol[i]));
+        }
+    }
+
+    return false;
 }
 
 bool SwitchMatrix::get(byte row, byte column) {
@@ -71,6 +80,16 @@ bool SwitchMatrix::get(byte row, byte column) {
     }
 
     return state;
+}
+
+bool SwitchMatrix::getOnce(byte number, int ms) {
+    for (byte i = 0; i <= registeredSwitchCounter; i++) {
+        if (number == registeredSwitchNum[i]) {
+            return getOnce(highByte(registeredSwitchRowCol[i]), lowByte(registeredSwitchRowCol[i]), ms);
+        }
+    }
+
+    return false;
 }
 
 bool SwitchMatrix::getOnce(byte row, byte column, int ms) {
@@ -103,7 +122,7 @@ bool SwitchMatrix::getOnce(byte row, byte column, int ms) {
 }
 
 void SwitchMatrix::_readNextRow() {
-    if (!digitalRead(53)) {
+    if (!digitalRead(4)) {
         switchMatrixInstance->columnCounter = 0;
     }
 
