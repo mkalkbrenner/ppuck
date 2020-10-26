@@ -3,8 +3,10 @@
 // see https://forum.arduino.cc/index.php?topic=398610.0
 SwitchMatrix* SwitchMatrix::switchMatrixInstance = NULL;
 
-SwitchMatrix::SwitchMatrix() {
+SwitchMatrix::SwitchMatrix(EventDispatcher* ed) {
     switchMatrixInstance = this;
+
+    eventDispatcher = ed;
 
     pinMode(2, INPUT);
     pinMode(3, INPUT);
@@ -18,7 +20,7 @@ SwitchMatrix::SwitchMatrix() {
     pinMode(28, INPUT);
     pinMode(29, INPUT);
 
-    pinMode(49, INPUT);
+    pinMode(53, INPUT);
 
     setLastRowToRead(8);
 	reset();
@@ -41,19 +43,37 @@ void SwitchMatrix::reset() {
     }
 }
 
-void SwitchMatrix::reset(int row, int column) {
+void SwitchMatrix::reset(byte row, byte column) {
     rows[row - 1] &= byte(pow(2, column - 1)) ^ B11111111;
 }
 
-void SwitchMatrix::setLastRowToRead(int last) {
+void SwitchMatrix::setLastRowToRead(byte last) {
     lastRowToRead = last - 1;
 }
 
-bool SwitchMatrix::get(int row, int column) {
-    return rows[row - 1] | byte(pow(2, column - 1));
+void SwitchMatrix::registerSwitch(byte row, byte column, byte number) {
+    if (registeredSwitchCounter < (MAX_SWITCHES_REGISTERED -1)) {
+        registeredSwitchRowCol[++registeredSwitchCounter] = word(row, column);
+        registeredSwitchNum[registeredSwitchCounter] = number;
+    }
 }
 
-bool SwitchMatrix::getOnce(int row, int column, int ms) {
+bool SwitchMatrix::get(byte row, byte column) {
+    bool state = rows[row - 1] | byte(pow(2, column - 1));
+
+    if (state && registeredSwitchCounter >= 0) {
+        word row_col = word(row, column);
+        for (byte i = 0; i <= registeredSwitchCounter; i++) {
+            if (row_col == registeredSwitchRowCol[i]) {
+                eventDispatcher->dispatch(EVENT_SOURCE_SWITCH, word(registeredSwitchNum[i]));
+            }
+        }
+    }
+
+    return state;
+}
+
+bool SwitchMatrix::getOnce(byte row, byte column, int ms) {
     word row_col = word(row, column);
     unsigned long now = millis();
     for (int i = 0; i < MAX_SWITCHES_BLOCKED; i++) {

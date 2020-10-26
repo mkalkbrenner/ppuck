@@ -9,23 +9,24 @@
 #define PUPSERIAL_h
 
 #include <Arduino.h>
+#include "EventListener.h"
 
 #define PUP_POST_EVENT_COMMAND 80 // "P"
 #define PUP_CUSTOM_COMMAND 67 // "C"
 #define PUP_EOF 13
-#define PUP_TYPE_DMD 68 // "D"
-#define PUP_TYPE_SWITCH 87 // "W"
 #define PUP_VALUE_ON 1
 #define PUP_CUSTOM_VOLUME 86 // "V"
 #define PUP_CUSTOM_BATCH 66 // "B"
 #define PUP_CUSTOM_RESTART 82 // "R"
 #define PUP_CUSTOM_SHUTDOWN 83 // "S"
 
-class PUPSerial {
+class PUPSerial : public EventListener {
 public:
     PUPSerial();
 
     void setSerial(HardwareSerial &reference);
+
+    void handleEvent(char sourceId, word eventId);
 
     void postEvent(char msgtype, int msgindex, int msgvalue);
 

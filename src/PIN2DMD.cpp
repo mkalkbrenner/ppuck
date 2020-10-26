@@ -1,7 +1,7 @@
 #include "PIN2DMD.h"
 
-PIN2DMD::PIN2DMD() {
-    forwardEnabled = false;
+PIN2DMD::PIN2DMD(EventDispatcher* eD) {
+    eventDispatcher = eD;
     reset();
 }
 
@@ -37,9 +37,7 @@ void PIN2DMD::update() {
                 if (nullByte == 0) {
                     eventCache[eventCacheCounter] = word(deviceByte - 100, eventByte);
 
-                    if (forwardEnabled) {
-                        pupSerial->postEvent(PUP_TYPE_DMD, eventCache[eventCacheCounter], PUP_VALUE_ON);
-                    }
+                    eventDispatcher->dispatch(EVENT_SOURCE_DMD, eventCache[eventCacheCounter]);
 
                     if (++eventCacheCounter > PIN2DMD_EVENT_CACHE_SIZE) {
                         eventCacheCounter = 0;
@@ -49,12 +47,6 @@ void PIN2DMD::update() {
         }
     }
 }
-
-void PIN2DMD::forwardToPUP(PUPSerial *pupSerial) {
-    forwardEnabled = true;
-    this->pupSerial = pupSerial;
-}
-
 
 void PIN2DMD::print() {
     Serial.println("PIN2DMD events");

@@ -1,135 +1,109 @@
 /**
- * ppuck.cpp - Library for Pinball Power-Up Controller.
+ * PPUCK.cpp - Library for Pinball Power-Up Controller.
  * Created by Markus Kalkbrenner, 2020.
  * Parts based on pindion by Eric Lyons and Wes Sparks, 2015.
  * Play more pinball!
  */
 
-#include "ppuck.h"
+#include "PPUCK.h"
 
-ppuck::ppuck() {
-    init(1, 1, 1, 1, "PPUC-1.0");
-}
+PPUCK::PPUCK(String controllerType) {
+    _pinState = new pinduinoPins(controllerType);
+    _eventDispatcher = new EventDispatcher();
 
-ppuck::ppuck(String arduinoType) {
-    init(1, 1, 1, 1, arduinoType);
-}
-
-ppuck::ppuck(int aledNum1, String arduinoType) {
-    init(aledNum1, 1, 1, 1, arduinoType);
-}
-
-ppuck::ppuck(int aledNum1, int aledNum2, String arduinoType) {
-    init(aledNum1, aledNum2, 1, 1, arduinoType);
-}
-
-ppuck::ppuck(int aledNum1, int aledNum2, int aledNum3) {
-    init(aledNum1, aledNum2, aledNum3, 1, "PPUC-1.0");
-}
-
-ppuck::ppuck(int aledNum1, int aledNum2, int aledNum3, String arduinoType) {
-    init(aledNum1, aledNum2, aledNum3, 1, arduinoType);
-}
-
-ppuck::ppuck(int aledNum1, int aledNum2, int aledNum3, int aledNum4, String arduinoType) {
-    init(aledNum1, aledNum2, aledNum3, aledNum4, arduinoType);
-}
-
-void ppuck::init(int aledNum1, int aledNum2, int aledNum3, int aledNum4, String arduinoType) {
-    _pinState = new pinduinoPins(arduinoType);
-
-    if (arduinoType == "PPUC-1.0") {
+    if (controllerType == "PPUC-Arduino-1.0.0") {
+        _switchMatrix = new SwitchMatrix(_eventDispatcher);
+        _pin2Dmd = new PIN2DMD(_eventDispatcher);
+        _pupSerial = new PUPSerial();
+#if defined(__IMXRT1062__) // Teensy 4.0 and 4.1
+    } else if (controllerType == "PPUC-Teensy-1.0.0") {
         ALED1 = new AddressableStrip(aledNum1, 69, _pinState); // A15
         ALED2 = new AddressableStrip(aledNum2, 68, _pinState); // A14
         ALED3 = new AddressableStrip(aledNum3, 67, _pinState); // A13
         ALED4 = new AddressableStrip(aledNum4, 66, _pinState); // A12
-        RGB1 = new RGBStrip(11, 12, 13); // pins 11,12,13
-        RGB2 = new RGBStrip(8, 9, 10); // pins 8,9,10
-        RGB3 = new RGBStrip(5, 6, 7); // pins 5,6,7
-        DATAPORT1 = new DataPort(69);
-        DATAPORT2 = new DataPort(68);
-        DATAPORT3 = new DataPort(67);
-        DATAPORT4 = new DataPort(66);
-        _switchMatrix = new SwitchMatrix();
-        _pin2Dmd = new PIN2DMD();
-        _pupSerial = new PUPSerial();
+        //PWM1 = new DataPort(69);
+#endif
     } else {
         Serial.print("Unsupported Arduino board: ");
-        Serial.println(arduinoType);
+        Serial.println(controllerType);
     }
 }
 
-pinduinoPins *ppuck::pinState() {
+pinduinoPins *PPUCK::pinState() {
     return _pinState;
 }
 
-SwitchMatrix *ppuck::switchMatrix() {
+SwitchMatrix *PPUCK::switchMatrix() {
     return _switchMatrix;
 }
 
-PIN2DMD *ppuck::pin2Dmd() {
+PIN2DMD *PPUCK::pin2Dmd() {
     return _pin2Dmd;
 }
 
-PUPSerial *ppuck::pupSerial() {
+PUPSerial *PPUCK::pupSerial() {
     return _pupSerial;
 }
 
-RGBStrip *ppuck::rgbLED1() {
+EventDispatcher *PPUCK::eventDispatcher() {
+    return _eventDispatcher;
+}
+
+RGBStrip *PPUCK::rgbLED1() {
     return RGB1;
 }
 
-RGBStrip *ppuck::rgbLED2() {
+RGBStrip *PPUCK::rgbLED2() {
     return RGB2;
 }
 
-RGBStrip *ppuck::rgbLED3() {
+RGBStrip *PPUCK::rgbLED3() {
     return RGB3;
 }
 
 
-RGBStrip *ppuck::rgbLED4() {
+RGBStrip *PPUCK::rgbLED4() {
     return RGB4;
 }
 
-AddressableStrip *ppuck::adrLED1() {
+AddressableStrip *PPUCK::adrLED1() {
     return ALED1;
 }
 
-AddressableStrip *ppuck::adrLED2() {
+AddressableStrip *PPUCK::adrLED2() {
     return ALED2;
 }
 
-AddressableStrip *ppuck::adrLED3() {
+AddressableStrip *PPUCK::adrLED3() {
     return ALED3;
 }
 
-AddressableStrip *ppuck::adrLED4() {
+AddressableStrip *PPUCK::adrLED4() {
     return ALED4;
 }
 
-AddressableMatrix *ppuck::adrMatrix(AddressableStrip *adr, int col, int row, int start) {
+AddressableMatrix *PPUCK::adrMatrix(AddressableStrip *adr, int col, int row, int start) {
     return new AddressableMatrix(adr, col, row, start);
 }
 
-DataPort *ppuck::port1() {
+DataPort *PPUCK::port1() {
     return DATAPORT1;
 }
 
-DataPort *ppuck::port2() {
+DataPort *PPUCK::port2() {
     return DATAPORT2;
 }
 
-DataPort *ppuck::port3() {
+DataPort *PPUCK::port3() {
     return DATAPORT3;
 }
 
-DataPort *ppuck::port4() {
+DataPort *PPUCK::port4() {
     return DATAPORT4;
 }
 
 //fade out all addressable strips
-void ppuck::fadeOutAllAdr(float time) {
+void PPUCK::fadeOutAllAdr(float time) {
     time = time / 256;
     for (int i = 1; i < 255; i++) {
         _pinState->update();
@@ -149,12 +123,12 @@ void ppuck::fadeOutAllAdr(float time) {
 //note that strip colors must be previously set.  
 //E.g.,:  ALED1->color("red", 1);  //brightness of 1
 
-void ppuck::colorAllAdrRGB(int r, int g, int b) {
+void PPUCK::colorAllAdrRGB(int r, int g, int b) {
     ALED1->colorRGB(r, g, b);
     ALED2->colorRGB(r, g, b);
 }
 
-void ppuck::colorAllAdr(String color) {
+void PPUCK::colorAllAdr(String color) {
     int r = 0;
     int g = 0;
     int b = 0;
@@ -162,7 +136,7 @@ void ppuck::colorAllAdr(String color) {
     colorAllAdrRGB(r, g, b);
 }
 
-void ppuck::fadeInAllAdrRGB(int r, int g, int b, float time) {
+void PPUCK::fadeInAllAdrRGB(int r, int g, int b, float time) {
     time = time / 256;
     ALED1->strip()->setBrightness(1);
     ALED1->strip()->show();
@@ -179,7 +153,7 @@ void ppuck::fadeInAllAdrRGB(int r, int g, int b, float time) {
     }
 }
 
-void ppuck::fadeInAllAdr(String color, float time) {
+void PPUCK::fadeInAllAdr(String color, float time) {
     int r = 0;
     int g = 0;
     int b = 0;
@@ -187,7 +161,7 @@ void ppuck::fadeInAllAdr(String color, float time) {
     fadeInAllAdrRGB(r, g, b, time);
 }
 
-void ppuck::fadeAllAdrRGB2RGB(float r1, float g1, float b1, float r2, float g2, float b2, float time) {
+void PPUCK::fadeAllAdrRGB2RGB(float r1, float g1, float b1, float r2, float g2, float b2, float time) {
     time = time / 256;
     ALED1->colorRGB(r1, g1, b1, 250);
     ALED2->colorRGB(r1, g1, b1, 250);
@@ -217,7 +191,7 @@ void ppuck::fadeAllAdrRGB2RGB(float r1, float g1, float b1, float r2, float g2, 
     }
 }
 
-void ppuck::fadeAllAdrColor2Color(String color1, String color2, float time) {
+void PPUCK::fadeAllAdrColor2Color(String color1, String color2, float time) {
     int r1, g1, b1;
     int r2, g2, b2;
     ALED1->color2RGB(color1, r1, g1, b1);
@@ -225,7 +199,7 @@ void ppuck::fadeAllAdrColor2Color(String color1, String color2, float time) {
     fadeAllAdrRGB2RGB(r1, g1, b1, r2, g2, b2, time);
 }
 
-void ppuck::chaseAllAdr2RGB(float r1, float g1, float b1, float r2, float g2, float b2, float span, int time, int dir) {
+void PPUCK::chaseAllAdr2RGB(float r1, float g1, float b1, float r2, float g2, float b2, float span, int time, int dir) {
     int pos;
     int numP = ALED1->strip()->numPixels();
     if (ALED2->strip()->numPixels() > numP) { numP = ALED2->strip()->numPixels(); }
@@ -263,7 +237,7 @@ void ppuck::chaseAllAdr2RGB(float r1, float g1, float b1, float r2, float g2, fl
     }
 }
 
-void ppuck::chaseAllAdr2Color(String color1, String color2, float span, int time, int dir) {
+void PPUCK::chaseAllAdr2Color(String color1, String color2, float span, int time, int dir) {
     int r1, g1, b1;
     int r2, g2, b2;
     ALED1->color2RGB(color1, r1, g1, b1);
@@ -271,7 +245,7 @@ void ppuck::chaseAllAdr2Color(String color1, String color2, float span, int time
     chaseAllAdr2RGB(r1, g1, b1, r2, g2, b2, span, time, dir);
 }
 
-void ppuck::chaseAllAdr2RGBFromPoint(int pos, float r1, float g1, float b1, float r2, float g2, float b2, int span,
+void PPUCK::chaseAllAdr2RGBFromPoint(int pos, float r1, float g1, float b1, float r2, float g2, float b2, int span,
                                         int time) {
     int numP = ALED1->strip()->numPixels();
     if (ALED2->strip()->numPixels() > numP) { numP = ALED2->strip()->numPixels(); }
@@ -325,7 +299,7 @@ void ppuck::chaseAllAdr2RGBFromPoint(int pos, float r1, float g1, float b1, floa
     }
 }
 
-void ppuck::testRGBStrip(RGBStrip *strip) {
+void PPUCK::testRGBStrip(RGBStrip *strip) {
     strip->set("red");
     delay(300);
     strip->set("green");
@@ -370,24 +344,24 @@ void ppuck::testRGBStrip(RGBStrip *strip) {
     delay(500);
 }
 
-void ppuck::testRGBStrip1() {
+void PPUCK::testRGBStrip1() {
     testRGBStrip(RGB1);
 }
 
-void ppuck::testRGBStrip2() {
+void PPUCK::testRGBStrip2() {
     testRGBStrip(RGB2);
 }
 
-void ppuck::testRGBStrip3() {
+void PPUCK::testRGBStrip3() {
     testRGBStrip(RGB3);
 }
 
-void ppuck::testRGBStrip4() {
+void PPUCK::testRGBStrip4() {
     testRGBStrip(RGB4);
 }
 
 
-void ppuck::testSpeakerAdrLED(AddressableStrip *strip) {
+void PPUCK::testSpeakerAdrLED(AddressableStrip *strip) {
     //chase2RGBCont(float r1, float g1, float b1, float r2, float g2, float b2, float span, int time, int dir, int startLED, int endLED)
 
     // Slow Red/Blue
@@ -456,13 +430,13 @@ void ppuck::testSpeakerAdrLED(AddressableStrip *strip) {
 
 }
 
-void ppuck::testSpeakerAdrLED1() {
+void PPUCK::testSpeakerAdrLED1() {
     testSpeakerAdrLED(ALED1);
 
 }
 
 
-void ppuck::testAdrLED(AddressableStrip *strip) {
+void PPUCK::testAdrLED(AddressableStrip *strip) {
     strip->chase("green", 10, 10, 1);
     strip->chase("blue", 10, 10, -1);
     strip->chase("red", 10, 10, 1);
@@ -549,7 +523,7 @@ void ppuck::testAdrLED(AddressableStrip *strip) {
     delay(200);
 }
 
-void ppuck::testAdrLEDAlpha(AddressableStrip *strip) {
+void PPUCK::testAdrLEDAlpha(AddressableStrip *strip) {
     strip->bullet("red", 10, 1, 1);
     strip->bullet("red", 10, 1, -1);
     strip->bullet("blue", 10, 1, 1);
@@ -567,34 +541,34 @@ void ppuck::testAdrLEDAlpha(AddressableStrip *strip) {
 
 }
 
-void ppuck::testAdrLED1() {
+void PPUCK::testAdrLED1() {
     testAdrLED(ALED1);
 }
 
-void ppuck::testAdrLED2() {
+void PPUCK::testAdrLED2() {
     testAdrLED(ALED2);
 }
 
-void ppuck::testAdrLED3() {
+void PPUCK::testAdrLED3() {
     testAdrLED(ALED3);
 }
 
-void ppuck::testAdrLED4() {
+void PPUCK::testAdrLED4() {
     testAdrLED(ALED4);
 }
 
-void ppuck::testAdrLED1Alpha() {
+void PPUCK::testAdrLED1Alpha() {
     testAdrLEDAlpha(ALED1);
 }
 
-void ppuck::testAdrLED2Alpha() {
+void PPUCK::testAdrLED2Alpha() {
     testAdrLEDAlpha(ALED2);
 }
 
-void ppuck::testAdrLED3Alpha() {
+void PPUCK::testAdrLED3Alpha() {
     testAdrLEDAlpha(ALED3);
 }
 
-void ppuck::testAdrLED4Alpha() {
+void PPUCK::testAdrLED4Alpha() {
     testAdrLEDAlpha(ALED4);
 }

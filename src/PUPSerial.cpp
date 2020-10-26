@@ -8,6 +8,9 @@ void PUPSerial::setSerial(HardwareSerial &reference) {
     ((HardwareSerial*) hwSerial)->begin(115200, SERIAL_8N1);
 }
 
+void PUPSerial::handleEvent(char sourceId, word eventId) {
+    write(PUP_POST_EVENT_COMMAND, sourceId, eventId, PUP_VALUE_ON);
+}
 
 void PUPSerial::postEvent(char msgtype, int msgindex, int msgvalue) {
     write(PUP_POST_EVENT_COMMAND, msgtype, word(msgindex), word(msgvalue));

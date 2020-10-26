@@ -9,13 +9,13 @@
 #define PIN2DMD_h
 
 #include <Arduino.h>
-#include "PUPSerial.h"
+#include "EventDispatcher.h"
 
 #define PIN2DMD_EVENT_CACHE_SIZE 10
 
 class PIN2DMD {
 public:
-    PIN2DMD();
+    PIN2DMD(EventDispatcher* eD);
 
     void setSerial(HardwareSerial &reference);
 
@@ -29,14 +29,11 @@ public:
 
     void update();
 
-    void forwardToPUP(PUPSerial *pupSerial);
-
 private:
+    EventDispatcher* eventDispatcher;
+
     uint16_t eventCache[PIN2DMD_EVENT_CACHE_SIZE];
     int eventCacheCounter;
-
-    bool forwardEnabled;
-    PUPSerial *pupSerial;
 
     Stream *hwSerial;
 

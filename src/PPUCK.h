@@ -1,5 +1,5 @@
-#ifndef ppuck_h
-#define ppuck_h
+#ifndef PPUCK_h
+#define PPUCK_h
 
 #include <Arduino.h>
 
@@ -11,27 +11,14 @@
 #include "SwitchMatrix.h"
 #include "PIN2DMD.h"
 #include "PUPSerial.h"
+#include "EventDispatcher.h"
+#include "EventListener.h"
 
-class ppuck {
+class PPUCK {
 protected:
 
 public:
-    //Constructor with no parameters
-    ppuck();
-
-    ppuck(String arduinoType);
-
-    //Overloaded Constructor for addressable strips (arduinoType defaults to Mega)
-    ppuck(int num1, int num2, int num3);
-
-    //Overloaded Constructor for addressable strips
-    ppuck(int num1, String arduinoType);
-
-    ppuck(int num1, int num2, String arduinoType);
-
-    ppuck(int num1, int num2, int num3, String arduinoType);
-
-    ppuck(int num1, int num2, int num3, int num4, String arduinoType);
+    PPUCK(String controllerType);
 
     //initialize pins for communication to/from arduino
     pinduinoPins *pinState();
@@ -41,6 +28,8 @@ public:
     PIN2DMD *pin2Dmd();
 
     PUPSerial *pupSerial();
+
+    EventDispatcher *eventDispatcher();
 
     //functions for controlling 12V RGB strips
     RGBStrip *rgbLED1();
@@ -137,6 +126,7 @@ private:
     SwitchMatrix *_switchMatrix;
     PIN2DMD *_pin2Dmd;
     PUPSerial *_pupSerial;
+    EventDispatcher *_eventDispatcher;
 
     //internal objects for RGB strip control`
     RGBStrip *RGB1;
