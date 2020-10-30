@@ -51,7 +51,7 @@ void SwitchMatrix::setLastRowToRead(byte last) {
 }
 
 void SwitchMatrix::registerSwitchAsEvent(byte row, byte column, byte number) {
-    if (registeredSwitchCounter < (MAX_SWITCHES_REGISTERED -1)) {
+    if (registeredSwitchCounter < (MAX_SWITCHES_REGISTERED - 1)) {
         registeredSwitchRowCol[++registeredSwitchCounter] = word(row, column);
         registeredSwitchNum[registeredSwitchCounter] = number;
     }
@@ -68,7 +68,7 @@ bool SwitchMatrix::get(byte number) {
 }
 
 bool SwitchMatrix::get(byte row, byte column) {
-    bool state = rows[row - 1] | byte(pow(2, column - 1));
+    bool state = rows[row - 1] & byte(pow(2, column - 1));
 
     if (state && registeredSwitchCounter >= 0) {
         word row_col = word(row, column);
