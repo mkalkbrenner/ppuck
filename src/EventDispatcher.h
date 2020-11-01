@@ -15,9 +15,16 @@
 #define MAX_EVENT_LISTENERS 5
 #endif
 
+#ifndef EVENT_STACK_SIZE
+#define EVENT_STACK_SIZE 10
+#endif
+
 #define EVENT_SOURCE_ANY 42 // "*"
+#define EVENT_SOURCE_EVENT 69 // "E", common event from different system, like VPX, DOF, PUP
 #define EVENT_SOURCE_DMD 68 // "D"
 #define EVENT_SOURCE_SWITCH 87 // "W"
+#define EVENT_SOURCE_LIGHT 76 // "L", mainly playfield inserts
+#define EVENT_SOURCE_SOLENOID 83 // "S", includes flashers
 
 class EventDispatcher {
 public:
@@ -30,11 +37,17 @@ public:
     void addListener(EventListener* eventListener);
 
     void dispatch(char sourceId, word eventId);
+    void dispatch(char sourceId, word eventId, byte value);
 
     void update();
 
 private:
-    void dispatchInternal(char sourceId, word eventId);
+    void callListeners(char sourceId, word eventId, byte value, bool send);
+
+    char stackSourceIds[EVENT_STACK_SIZE];
+    word stackEventIds[EVENT_STACK_SIZE];
+    byte stackValues[EVENT_STACK_SIZE];
+    int stackCounter = -1;
 
     EventListener* eventListeners[MAX_EVENT_LISTENERS];
     char eventListenerFilters[MAX_EVENT_LISTENERS];

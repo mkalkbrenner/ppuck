@@ -1,12 +1,12 @@
 /*
-  PUPSerial.h - Library for pinduino shield for Arduinos.
+  PUPComLink.h
   Created by Markus Kalkbrenner, 2020.
 
   Play more pinball!
 */
 
-#ifndef PUPSERIAL_h
-#define PUPSERIAL_h
+#ifndef PUPCOMLINK_h
+#define PUPCOMLINK_h
 
 #include <Arduino.h>
 #include "EventListener.h"
@@ -20,13 +20,13 @@
 #define PUP_CUSTOM_RESTART 82 // "R"
 #define PUP_CUSTOM_SHUTDOWN 83 // "S"
 
-class PUPSerial : public EventListener {
+class PUPComLink : public EventListener {
 public:
-    PUPSerial();
+    PUPComLink() {}
 
     void setSerial(HardwareSerial &reference);
 
-    void handleEvent(char sourceId, word eventId);
+    void handleEvent(char sourceId, word eventId, byte value);
 
     void postEvent(char msgtype, int msgindex, int msgvalue);
 

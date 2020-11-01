@@ -9,53 +9,40 @@
 #define SwitchMatrix_h
 
 #include <Arduino.h>
-#include "EventDispatcher.h"
+#include "Matrix.h"
 
-#ifndef MAX_SWITCHES_REGISTERED
-#define MAX_SWITCHES_REGISTERED 10
-#endif
-
-#define MAX_SWITCHES_BLOCKED 10
-
-class SwitchMatrix {
+class SwitchMatrix : public Matrix {
 public:
-    SwitchMatrix(EventDispatcher* eD);
+    SwitchMatrix(EventDispatcher* eD) : Matrix(eD) {
+        switchMatrixInstance = this;
 
-    bool get(byte number);
+        pinMode(2, INPUT);
+        pinMode(3, INPUT);
+        pinMode(4, INPUT);
 
-    bool getOnce(byte number, int ms);
+        pinMode(22, INPUT);
+        pinMode(23, INPUT);
+        pinMode(24, INPUT);
+        pinMode(25, INPUT);
+        pinMode(26, INPUT);
+        pinMode(27, INPUT);
+        pinMode(28, INPUT);
+        pinMode(29, INPUT);
+    }
 
-    bool get(byte row, byte column);
+    void start();
 
-    bool getOnce(byte row, byte column, int ms);
+    void stop();
 
-    void reset(byte row, byte column);
+    static void _readRow();
 
-    void reset();
+    volatile byte columnCounter = -1;
 
-    void print();
-
-    void setLastRowToRead(byte lastRowToRead);
-
-    void registerSwitchAsEvent(byte row, byte column, byte number);
-
-    static void _readNextRow();
-
-    volatile byte lastRowToRead;
-    volatile byte columnCounter;
-    volatile byte rows[8];
+protected:
+    char eventSource = EVENT_SOURCE_SWITCH;
 
 private:
     static SwitchMatrix* switchMatrixInstance;
-    EventDispatcher* eventDispatcher;
-
-    int blockCounter;
-    word blocked[MAX_SWITCHES_BLOCKED];
-    unsigned long blockedMs[MAX_SWITCHES_BLOCKED];
-
-    int registeredSwitchCounter = -1;
-    word registeredSwitchRowCol[MAX_SWITCHES_REGISTERED];
-    byte registeredSwitchNum[MAX_SWITCHES_REGISTERED];
 };
 
 #endif

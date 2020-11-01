@@ -6,11 +6,12 @@
 #include "RGBStrip.h"
 #include "AddressableStrip.h"
 #include "AddressableMatrix.h"
-#include "pinduinoPins.h"
+#include "Solenoids.h"
 #include "DataPort.h"
 #include "SwitchMatrix.h"
+#include "LightMatrix.h"
 #include "PIN2DMD.h"
-#include "PUPSerial.h"
+#include "PUPComLink.h"
 #include "EventDispatcher.h"
 #include "EventListener.h"
 
@@ -20,14 +21,15 @@ protected:
 public:
     PPUCK(String controllerType);
 
-    //initialize pins for communication to/from arduino
-    pinduinoPins *pinState();
+    Solenoids *solenoids();
 
     SwitchMatrix *switchMatrix();
 
+    LightMatrix *lightMatrix();
+
     PIN2DMD *pin2Dmd();
 
-    PUPSerial *pupSerial();
+    PUPComLink *pupComLink();
 
     EventDispatcher *eventDispatcher();
 
@@ -122,10 +124,11 @@ public:
 
 private:
     //internal object for monitoring pinball machine states
-    pinduinoPins *_pinState;
+    Solenoids *_solenoids;
     SwitchMatrix *_switchMatrix;
+    LightMatrix *_lightMatrix;
     PIN2DMD *_pin2Dmd;
-    PUPSerial *_pupSerial;
+    PUPComLink *_pupComLink;
     EventDispatcher *_eventDispatcher;
 
     //internal objects for RGB strip control`

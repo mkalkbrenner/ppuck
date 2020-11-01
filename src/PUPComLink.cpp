@@ -1,50 +1,47 @@
-#include "PUPSerial.h"
+#include "PUPComLink.h"
 
-PUPSerial::PUPSerial() {
-}
-
-void PUPSerial::setSerial(HardwareSerial &reference) {
+void PUPComLink::setSerial(HardwareSerial &reference) {
     hwSerial = &reference;
     ((HardwareSerial*) hwSerial)->begin(115200, SERIAL_8N1);
 }
 
-void PUPSerial::handleEvent(char sourceId, word eventId) {
-    write(PUP_POST_EVENT_COMMAND, sourceId, eventId, PUP_VALUE_ON);
+void PUPComLink::handleEvent(char sourceId, word eventId, byte value) {
+    write(PUP_POST_EVENT_COMMAND, sourceId, eventId, value);
 }
 
-void PUPSerial::postEvent(char msgtype, int msgindex, int msgvalue) {
+void PUPComLink::postEvent(char msgtype, int msgindex, int msgvalue) {
     write(PUP_POST_EVENT_COMMAND, msgtype, word(msgindex), word(msgvalue));
 }
 
-void PUPSerial::customCommand(char msgtype, int msgindex, int msgvalue) {
+void PUPComLink::customCommand(char msgtype, int msgindex, int msgvalue) {
     write(PUP_CUSTOM_COMMAND, msgtype, word(msgindex), word(msgvalue));
 }
 
-void PUPSerial::setVolume(int volume) {
+void PUPComLink::setVolume(int volume) {
     write(PUP_CUSTOM_COMMAND, PUP_CUSTOM_VOLUME, word(0), word(volume));
 }
 
-void PUPSerial::startBatch(int id) {
+void PUPComLink::startBatch(int id) {
     write(PUP_CUSTOM_COMMAND, PUP_CUSTOM_BATCH, word(0), word(id));
 }
 
-void PUPSerial::restart() {
+void PUPComLink::restart() {
     write(PUP_CUSTOM_COMMAND, PUP_CUSTOM_RESTART, word(0), word(1));
 }
 
-void PUPSerial::shutdown() {
+void PUPComLink::shutdown() {
     write(PUP_CUSTOM_COMMAND, PUP_CUSTOM_SHUTDOWN, word(0), word(1));
 }
 
-int PUPSerial::available() {
+int PUPComLink::available() {
     return hwSerial->available();
 }
 
-byte PUPSerial::read() {
+byte PUPComLink::read() {
     return hwSerial->read();
 }
 
-void PUPSerial::write(byte command, char msgtype, word msgindex, word msgvalue) {
+void PUPComLink::write(byte command, char msgtype, word msgindex, word msgvalue) {
     byte msg[8];
 
     msg[0] = command;

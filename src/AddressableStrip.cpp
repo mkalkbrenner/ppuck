@@ -1,10 +1,10 @@
 #include "AddressableStrip.h"
 
-AddressableStrip::AddressableStrip(int num, int pin, pinduinoPins* pinState)
+AddressableStrip::AddressableStrip(int num, int pin)
 {
 	//Data channel
 	pinMode(pin, OUTPUT);
-	_pinState=pinState;
+	//_pinState=pinState;
 	_pin = pin;
 	_numLEDs = num;
 	_strip = new Adafruit_NeoPixel(_numLEDs, _pin, NEO_GRB + NEO_KHZ800);
@@ -227,7 +227,7 @@ void AddressableStrip::fadeInRGB(int r, int g, int b, float time)
 	colorRGB(r,g,b);
 	if (time < 1) {time = 0;}
 	for (int i = 1; i < 256; i++) {
-		_pinState->update();
+		//_pinState->update();
 		if (time) {delay(time);}
 		_strip->setBrightness(i);
 		_strip->show();
@@ -250,7 +250,7 @@ void AddressableStrip::fadeRGB2RGB(float r1, float g1, float b1, float r2, float
 	float bcs = abs(b1-b2)/256;
 	if (b2 > b1){bcs=bcs*-1;}
 	for (int i = 1; i < 256; i++) {
-		_pinState->update();
+		//_pinState->update();
 		if (time) {delay(time);}
 		float r = r1-(rcs*i);
 		float g = g1-(gcs*i);
@@ -278,7 +278,7 @@ void AddressableStrip::fadeOut(float steps)
 	float brightStep = origBrightness/steps; 
 
 	for (int i=0; i<steps; i++) {
-		_pinState->update();
+		//_pinState->update();
 		int brightness = origBrightness-(brightStep+brightStep*i);
 		if (brightness < 1) {brightness=1;}
 		_strip->setBrightness(brightness);
@@ -389,7 +389,7 @@ void AddressableStrip::chase2RGB(float r1, float g1, float b1, float r2, float g
 		else {pos++;}
 	}
 	for (int i = 0; i < numP; i++) {
-		_pinState->update();
+		//_pinState->update();
 		float r = r1;
 		float g = g1;
 		float b = b1;
@@ -408,7 +408,7 @@ void AddressableStrip::chase2RGB(float r1, float g1, float b1, float r2, float g
 		else {pos++;}
 	}
 	for (int i = 0; i < span; i++) {
-		_pinState->update();
+		//_pinState->update();
 		RGBBand (pos, r2,g2,b2,span);
 		if (time){delay(time);}
 		for(int j=-span; j<= span; j++) {
@@ -433,7 +433,7 @@ void AddressableStrip::chase2RGBFromPoint(int pos, float r1, float g1, float b1,
 	if (b2 > b1){bcs=bcs*-1;}
 
 	for (int i = 0; i < max_pos; i++) {
-		_pinState->update();
+		//_pinState->update();
 		float r = r1;
 		float g = g1;
 		float b = b1;
@@ -452,7 +452,7 @@ void AddressableStrip::chase2RGBFromPoint(int pos, float r1, float g1, float b1,
 		}
 	}
 	for (int i = 0; i < span; i++) {
-		_pinState->update();
+		//_pinState->update();
 		RGBBand (pos-max_pos-i, r2,g2,b2,span);
 		RGBBand (pos+max_pos+i, r2,g2,b2,span);
 		for(int j=-span; j<= span; j++) {
@@ -495,7 +495,7 @@ void AddressableStrip::chase2RGBCont(float r1, float g1, float b1, float r2, flo
 	if (b2 > b1){bcs=bcs*-1;}
 
 	for (int i = startLED; i < startLED+numP; i++) {
-		_pinState->update();
+		//_pinState->update();
 		float r = r1;
 		float g = g1;
 		float b = b1;
@@ -598,7 +598,7 @@ void AddressableStrip::spreadInFromPoint2RGB (int pos, float r1, float g1, float
 
 	//  _strip->setBrightness(255);
 	for(int i=0; i<num_positions; i++) {
-		_pinState->update();
+		//_pinState->update();
 		float r = r1;
 		float g = g1;
 		float b = b1;
@@ -649,7 +649,7 @@ void AddressableStrip::spreadOutFromPoint (int pos, float time) {
 
 	for(int i=0; i<num_positions; i++) 
 	{
-		_pinState->update();
+		//_pinState->update();
 		_strip->setPixelColor(pos + i, 0, 0, 0);
 		_strip->setPixelColor(pos - i, 0, 0, 0);
 		_strip->show();
@@ -671,7 +671,7 @@ void AddressableStrip::spreadOutToPoint (int pos, float time) {
 
 	for(int i=num_positions; i>0; i--) 
 	{
-		_pinState->update();
+		//_pinState->update();
 		_strip->setPixelColor(pos + i, 0, 0, 0);
 		_strip->setPixelColor(pos - i, 0, 0, 0);
 		_strip->show();
@@ -724,9 +724,9 @@ void AddressableStrip::rainbow(int wait)
 	int i, j; 
 	//  _strip->setBrightness(255);
 	for(j=0; j<256; j++) {
-		_pinState->update();
+		//_pinState->update();
 		for(i=0; i<_strip->numPixels(); i++) {
-			_pinState->update();
+			//_pinState->update();
 			_strip->setPixelColor(_strip->numPixels()-i, Wheel((i+j) & 255));
 		}
 		_strip->show();
@@ -740,9 +740,9 @@ void AddressableStrip::rainbowCycle(int wait)
 	int i, j; 
 	//  _strip->setBrightness(255);
 	for(j=0; j<256; j++) { 
-		_pinState->update();
+		//_pinState->update();
 		for(i=0; i < _strip->numPixels(); i++) {
-			_pinState->update();
+			//_pinState->update();
 			_strip->setPixelColor(_strip->numPixels()-i, Wheel(((i * 256 / _strip->numPixels()) + j*2) & 255));
 		}
 		_strip->show();
@@ -864,13 +864,13 @@ void AddressableStrip::bulletP2P_2RGB(float r1, float g1, float b1, float r2, fl
 	if (b2 > b1){bcs=bcs*-1;}
 
 	for (int i = 0; i <= numP; i++) {
-		_pinState->update();
+		//_pinState->update();
 		// Rather than being sneaky and erasing just the tail pixel,
 		// it's easier to erase it all and draw a new one next time.
 		for(int j=-span; j<= span; j++) 
 		{
 			_strip->setPixelColor(pos+j, 0,0,0);
-			//_pinState->update();
+			////_pinState->update();
 		}
 		float r = r1;
 		float g = g1;
@@ -930,7 +930,7 @@ void AddressableStrip::bulletFromPoint2RGB(float r1, float g1, float b1, float r
 	int limit = abs(numP-start_pos);
 	if (limit < numP/2) limit = numP-limit;
 	for (int i = 0; i < limit+span*2; i++) {
-		_pinState->update();
+		//_pinState->update();
 		float r = r1;
 		float g = g1;
 		float b = b1;
@@ -1079,7 +1079,7 @@ void AddressableStrip::multiBullet2RGB(float r1, float g1, float b1, float r2, f
 	if (b2 > b1){bcs=bcs*-1;}
 
 	for (int i = 0; i < distance*num; i++) {
-		_pinState->update();
+		//_pinState->update();
 		float r = r1;
 		float g = g1;
 		float b = b1;
@@ -1153,7 +1153,7 @@ void AddressableStrip::Matrix2RGB(float r1, float g1, float b1, float r2, float 
 	for (int i = 0; i < numP+span*2+120; i++) {
 		// this is what I have to change to make the matrix effect
 
-		_pinState->update();
+		//_pinState->update();
 		float r = r1;
 		float g = g1;
 		float b = b1;

@@ -15,13 +15,12 @@
 
 class PIN2DMD {
 public:
-    PIN2DMD(EventDispatcher* eD);
+    PIN2DMD(EventDispatcher* eD) {
+        eventDispatcher = eD;
+        reset();
+    }
 
     void setSerial(HardwareSerial &reference);
-
-    bool get(byte device, byte command);
-
-    void reset(byte device, byte command);
 
     void reset();
 

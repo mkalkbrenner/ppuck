@@ -8,19 +8,20 @@
 #include "PPUCK.h"
 
 PPUCK::PPUCK(String controllerType) {
-    _pinState = new pinduinoPins(controllerType);
     _eventDispatcher = new EventDispatcher();
+    _solenoids = new Solenoids(controllerType, _eventDispatcher);
 
     if (controllerType == "PPUC-Arduino-1.0.0") {
         _switchMatrix = new SwitchMatrix(_eventDispatcher);
+        _lightMatrix = new LightMatrix(_eventDispatcher);
         _pin2Dmd = new PIN2DMD(_eventDispatcher);
-        _pupSerial = new PUPSerial();
+        _pupComLink = new PUPComLink();
 #if defined(__IMXRT1062__) // Teensy 4.0 and 4.1
     } else if (controllerType == "PPUC-Teensy-1.0.0") {
-        ALED1 = new AddressableStrip(aledNum1, 69, _pinState); // A15
-        ALED2 = new AddressableStrip(aledNum2, 68, _pinState); // A14
-        ALED3 = new AddressableStrip(aledNum3, 67, _pinState); // A13
-        ALED4 = new AddressableStrip(aledNum4, 66, _pinState); // A12
+        ALED1 = new AddressableStrip(aledNum1, 69); // A15
+        ALED2 = new AddressableStrip(aledNum2, 68); // A14
+        ALED3 = new AddressableStrip(aledNum3, 67); // A13
+        ALED4 = new AddressableStrip(aledNum4, 66); // A12
         //PWM1 = new DataPort(69);
 #endif
     } else {
@@ -29,20 +30,24 @@ PPUCK::PPUCK(String controllerType) {
     }
 }
 
-pinduinoPins *PPUCK::pinState() {
-    return _pinState;
+Solenoids *PPUCK::solenoids() {
+    return _solenoids;
 }
 
 SwitchMatrix *PPUCK::switchMatrix() {
     return _switchMatrix;
 }
 
+LightMatrix *PPUCK::lightMatrix() {
+    return _lightMatrix;
+}
+
 PIN2DMD *PPUCK::pin2Dmd() {
     return _pin2Dmd;
 }
 
-PUPSerial *PPUCK::pupSerial() {
-    return _pupSerial;
+PUPComLink *PPUCK::pupComLink() {
+    return _pupComLink;
 }
 
 EventDispatcher *PPUCK::eventDispatcher() {
@@ -106,7 +111,7 @@ DataPort *PPUCK::port4() {
 void PPUCK::fadeOutAllAdr(float time) {
     time = time / 256;
     for (int i = 1; i < 255; i++) {
-        _pinState->update();
+        //_pinState->update();
         if (time) { delay(time); }
         ALED1->strip()->setBrightness(256 - i);
         ALED2->strip()->setBrightness(256 - i);
@@ -144,7 +149,7 @@ void PPUCK::fadeInAllAdrRGB(int r, int g, int b, float time) {
     ALED2->strip()->show();
     colorAllAdrRGB(r, g, b);
     for (int i = 2; i < 256; i++) {
-        _pinState->update();
+        //_pinState->update();
         if (time) { delay(time); }
         ALED1->strip()->setBrightness(i);
         ALED2->strip()->setBrightness(i);
@@ -177,7 +182,7 @@ void PPUCK::fadeAllAdrRGB2RGB(float r1, float g1, float b1, float r2, float g2, 
     float bcs = abs(b1 - b2) / 256;
     if (b2 > b1) { bcs = bcs * -1; }
     for (int i = 1; i < 256; i++) {
-        _pinState->update();
+        //_pinState->update();
         if (time) { delay(time); }
         float r = r1 - (rcs * i);
         float g = g1 - (gcs * i);
@@ -214,7 +219,7 @@ void PPUCK::chaseAllAdr2RGB(float r1, float g1, float b1, float r2, float g2, fl
     if (b2 > b1) { bcs = bcs * -1; }
 
     for (int i = 0; i < numP + 2 * span + 1; i++) {
-        _pinState->update();
+        //_pinState->update();
         float r = r1;
         float g = g1;
         float b = b1;
@@ -261,7 +266,7 @@ void PPUCK::chaseAllAdr2RGBFromPoint(int pos, float r1, float g1, float b1, floa
     if (b2 > b1) { bcs = bcs * -1; }
 
     for (int i = 0; i < max_pos + span; i++) {
-        _pinState->update();
+        //_pinState->update();
 
         // Rather than being sneaky and erasing just the tail pixel,
         // it's easier to erase it all and draw a new one next time.
@@ -295,7 +300,7 @@ void PPUCK::chaseAllAdr2RGBFromPoint(int pos, float r1, float g1, float b1, floa
         if (time) { delay(time); }
     }
     for (int i = 0; i < span; i++) {
-        _pinState->update();
+        //_pinState->update();
     }
 }
 

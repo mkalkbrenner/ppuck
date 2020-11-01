@@ -1,10 +1,5 @@
 #include "PIN2DMD.h"
 
-PIN2DMD::PIN2DMD(EventDispatcher* eD) {
-    eventDispatcher = eD;
-    reset();
-}
-
 void PIN2DMD::setSerial(HardwareSerial &reference) {
     hwSerial = &reference;
     ((HardwareSerial*) hwSerial)->begin(57600);
@@ -17,16 +12,6 @@ void PIN2DMD::reset() {
     eventCacheCounter = 0;
 }
 
-bool PIN2DMD::get(byte device, byte command) {
-    uint16_t event = word(device, command);
-    for (int i = 0; i < PIN2DMD_EVENT_CACHE_SIZE; i++) {
-        if (eventCache[i] == event) {
-            return true;
-        }
-    }
-    return false;
-}
-
 void PIN2DMD::update() {
     if (hwSerial->available() > 2) {
         byte deviceByte = hwSerial->read();
@@ -35,9 +20,7 @@ void PIN2DMD::update() {
             if (eventByte != 0) {
                 byte nullByte = hwSerial->read();
                 if (nullByte == 0) {
-                    eventCache[eventCacheCounter] = word(deviceByte - 100, eventByte);
-
-                    eventDispatcher->dispatch(EVENT_SOURCE_DMD, eventCache[eventCacheCounter]);
+                    eventDispatcher->dispatch(EVENT_SOURCE_DMD, word(deviceByte - 100, eventByte));
 
                     if (++eventCacheCounter > PIN2DMD_EVENT_CACHE_SIZE) {
                         eventCacheCounter = 0;

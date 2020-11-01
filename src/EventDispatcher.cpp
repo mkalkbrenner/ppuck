@@ -21,32 +21,47 @@ void EventDispatcher::addListener(EventListener* eventListener, char sourceId) {
 }
 
 void EventDispatcher::dispatch(char sourceId, word eventId) {
-    for (int i = 0; i <= numListeners; i++) {
+    dispatch(sourceId, eventId, 1);
+}
+
+void EventDispatcher::dispatch(char sourceId, word eventId, byte value) {
+    noInterrupts();
+    stackSourceIds[++stackCounter] = sourceId;
+    stackEventIds[stackCounter] = eventId;
+    stackValues[stackCounter] = value;
+    interrupts();
+}
+
+void EventDispatcher::callListeners(char sourceId, word eventId, byte value, bool send) {
+    for (byte i = 0; i <= numListeners; i++) {
         if (sourceId == eventListenerFilters[i] || EVENT_SOURCE_ANY == eventListenerFilters[i]) {
-            eventListeners[i]->handleEvent(sourceId, eventId);
+            eventListeners[i]->handleEvent(sourceId, eventId, value);
         }
 
-        if (crossLink) {
-            byte msg[3];
+        if (send) {
+            byte msg[4];
 
             msg[0] = (byte) sourceId;
             msg[1] = highByte(eventId);
             msg[2] = lowByte(eventId);
+            msg[3] = value;
 
-            hwSerial->write(msg, 3);
-        }
-    }
-}
-
-void EventDispatcher::dispatchInternal(char sourceId, word eventId) {
-    for (int i = 0; i <= numListeners; i++) {
-        if (sourceId == eventListenerFilters[i] || '*' == eventListenerFilters[i]) {
-            eventListeners[i]->handleEvent(sourceId, eventId);
+            hwSerial->write(msg, 4);
         }
     }
 }
 
 void EventDispatcher::update() {
+    while (stackCounter > 0) {
+        noInterrupts();
+        char sourceId = stackSourceIds[stackCounter];
+        word eventId = stackEventIds[stackCounter];
+        byte value = stackValues[stackCounter--];
+        interrupts();
+
+        callListeners((char) sourceId, eventId, value, crossLink);
+    }
+
     if (crossLink && hwSerial->available() > 3) {
         byte sourceId = hwSerial->read();
         if (sourceId != 0) {
@@ -54,9 +69,12 @@ void EventDispatcher::update() {
             if (eventIdHighByte != 0) {
                 byte eventIdLowByte = hwSerial->read();
                 if (eventIdLowByte != 0) {
-                    byte nullByte = hwSerial->read();
-                    if (nullByte == 0) {
-                        dispatch((char) sourceId, word(eventIdHighByte, eventIdLowByte));
+                    byte value = hwSerial->read();
+                    if (value != 0) {
+                        byte nullByte = hwSerial->read();
+                        if (nullByte == 0) {
+                            callListeners((char) sourceId, word(eventIdHighByte, eventIdLowByte), value, false);
+                        }
                     }
                 }
             }
