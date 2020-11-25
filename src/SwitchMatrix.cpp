@@ -1,5 +1,9 @@
 #include "SwitchMatrix.h"
 
+#if defined(__IMXRT1062__) // Teensy 4.0 and 4.1
+#define PINA 0
+#endif
+
 // see https://forum.arduino.cc/index.php?topic=398610.0
 SwitchMatrix* SwitchMatrix::switchMatrixInstance = NULL;
 

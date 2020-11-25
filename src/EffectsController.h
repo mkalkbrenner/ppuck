@@ -2,7 +2,7 @@
 #define EFFECTSCONTROLLER_h
 
 #include <Arduino.h>
-#include <TaskScheduler.h>
+#include <TaskSchedulerDeclarations.h>
 
 #include "RGBStrip.h"
 #include "AddressableStrip.h"
