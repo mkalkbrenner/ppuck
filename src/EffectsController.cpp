@@ -28,6 +28,10 @@ CrossLinkDebugger *EffectsController::crossLinkDebugger() {
     return _crossLinkDebugger;
 }
 
+UVStrip *EffectsController::uv() {
+    return UV;
+}
+
 RGBStrip *EffectsController::rgbLED1() {
     return RGB1;
 }
