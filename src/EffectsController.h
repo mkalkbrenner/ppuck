@@ -5,7 +5,6 @@
 #include <TaskSchedulerDeclarations.h>
 
 #include "AddressableStrip.h"
-#include "AddressableMatrix.h"
 #include "DataPort.h"
 #include "EventDispatcher.h"
 #include "EventListener.h"
@@ -33,10 +32,7 @@ public:
 
     AddressableStrip *adrLED4();
 
-    //functions for creating 5V Addressable LED matrices
-    AddressableMatrix *adrMatrix(AddressableStrip *adr, int col, int row, int start);
-
-    //Functions for controlling output ports 
+    //Functions for controlling output ports
     DataPort *port1();
 
     DataPort *port2();

@@ -48,10 +48,6 @@ AddressableStrip *EffectsController::adrLED4() {
     return ALED4;
 }
 
-AddressableMatrix *EffectsController::adrMatrix(AddressableStrip *adr, int col, int row, int start) {
-    return new AddressableMatrix(adr, col, row, start);
-}
-
 DataPort *EffectsController::port1() {
     return DATAPORT1;
 }
