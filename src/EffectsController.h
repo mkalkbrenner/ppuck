@@ -5,7 +5,6 @@
 #include <TaskSchedulerDeclarations.h>
 
 #include "AddressableStrip.h"
-#include "DataPort.h"
 #include "EventDispatcher.h"
 #include "EventListener.h"
 #include "UVStrip.h"
@@ -31,15 +30,6 @@ public:
     AddressableStrip *adrLED3();
 
     AddressableStrip *adrLED4();
-
-    //Functions for controlling output ports
-    DataPort *port1();
-
-    DataPort *port2();
-
-    DataPort *port3();
-
-    DataPort *port4();
 
     //functions that affect multiple AddressableStrips simultaneously
     // color all strips
@@ -102,12 +92,6 @@ private:
     AddressableStrip *ALED2;
     AddressableStrip *ALED3;
     AddressableStrip *ALED4;
-
-    //internal objects for control output ports (set high and low for transistor/relay control)
-    DataPort *DATAPORT1;
-    DataPort *DATAPORT2;
-    DataPort *DATAPORT3;
-    DataPort *DATAPORT4;
 
     void init(int aledNum1, int aledNum2, int aledNum3, int aledNum4, String arduinoType);
 };

@@ -48,22 +48,6 @@ AddressableStrip *EffectsController::adrLED4() {
     return ALED4;
 }
 
-DataPort *EffectsController::port1() {
-    return DATAPORT1;
-}
-
-DataPort *EffectsController::port2() {
-    return DATAPORT2;
-}
-
-DataPort *EffectsController::port3() {
-    return DATAPORT3;
-}
-
-DataPort *EffectsController::port4() {
-    return DATAPORT4;
-}
-
 //fade out all addressable strips
 void EffectsController::fadeOutAllAdr(float time) {
     time = time / 256;
