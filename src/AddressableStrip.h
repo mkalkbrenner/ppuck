@@ -1,5 +1,5 @@
 /*
-   RGBStrip.h - Library for pinduino shield for Arduinos.
+   AddressableStrip.h - Library for pinduino shield for Arduinos.
    Created by Eric Lyons and Wes Sparks, 2015.
    Released into the public domain.
    Play more pinball!

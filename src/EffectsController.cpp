@@ -32,23 +32,6 @@ UVStrip *EffectsController::uv() {
     return UV;
 }
 
-RGBStrip *EffectsController::rgbLED1() {
-    return RGB1;
-}
-
-RGBStrip *EffectsController::rgbLED2() {
-    return RGB2;
-}
-
-RGBStrip *EffectsController::rgbLED3() {
-    return RGB3;
-}
-
-
-RGBStrip *EffectsController::rgbLED4() {
-    return RGB4;
-}
-
 AddressableStrip *EffectsController::adrLED1() {
     return ALED1;
 }
@@ -281,68 +264,6 @@ void EffectsController::chaseAllAdr2RGBFromPoint(int pos, float r1, float g1, fl
         //_pinState->update();
     }
 }
-
-void EffectsController::testRGBStrip(RGBStrip *strip) {
-    strip->set("red");
-    delay(300);
-    strip->set("green");
-    delay(300);
-    strip->set("blue");
-    delay(300);
-    strip->set("yellow");
-    delay(300);
-    strip->set("purple");
-    delay(300);
-    strip->set("cyan");
-    delay(300);
-    strip->set("white");
-    delay(300);
-    strip->fadeIn("red", 300);
-    delay(100);
-    strip->fadeOut(300);
-    delay(500);
-    strip->fadeIn("green", 300);
-    delay(100);
-    strip->fadeOut(300);
-    delay(500);
-    strip->fadeIn("blue", 300);
-    delay(100);
-    strip->fadeOut(300);
-    delay(500);
-    strip->fadeIn("yellow", 300);
-    delay(100);
-    strip->fadeOut(300);
-    delay(500);
-    strip->fadeIn("purple", 300);
-    delay(100);
-    strip->fadeOut(300);
-    delay(500);
-    strip->fadeIn("cyan", 300);
-    delay(100);
-    strip->fadeOut(300);
-    delay(500);
-    strip->fadeIn("white", 300);
-    delay(100);
-    strip->fadeOut(300);
-    delay(500);
-}
-
-void EffectsController::testRGBStrip1() {
-    testRGBStrip(RGB1);
-}
-
-void EffectsController::testRGBStrip2() {
-    testRGBStrip(RGB2);
-}
-
-void EffectsController::testRGBStrip3() {
-    testRGBStrip(RGB3);
-}
-
-void EffectsController::testRGBStrip4() {
-    testRGBStrip(RGB4);
-}
-
 
 void EffectsController::testSpeakerAdrLED(AddressableStrip *strip) {
     //chase2RGBCont(float r1, float g1, float b1, float r2, float g2, float b2, float span, int time, int dir, int startLED, int endLED)

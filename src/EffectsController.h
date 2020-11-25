@@ -4,7 +4,6 @@
 #include <Arduino.h>
 #include <TaskSchedulerDeclarations.h>
 
-#include "RGBStrip.h"
 #include "AddressableStrip.h"
 #include "AddressableMatrix.h"
 #include "DataPort.h"
@@ -24,14 +23,6 @@ public:
 
     //functions for controlling 12V RGB strips
     UVStrip *uv();
-
-    RGBStrip *rgbLED1();
-
-    RGBStrip *rgbLED2();
-
-    RGBStrip *rgbLED3();
-
-    RGBStrip *rgbLED4();
 
     //functions for controlling 5V Addressable LED strips
     AddressableStrip *adrLED1();
@@ -76,18 +67,7 @@ public:
 
     void chaseAllAdr2Color(String color1, String color2, float span, int time, int dir);
 
-    void
-    chaseAllAdr2RGBFromPoint(int pos, float r1, float g1, float b1, float r2, float g2, float b2, int span, int time);
-
-    void testRGBStrip(RGBStrip *strip);
-
-    void testRGBStrip1();
-
-    void testRGBStrip2();
-
-    void testRGBStrip3();
-
-    void testRGBStrip4();
+    void chaseAllAdr2RGBFromPoint(int pos, float r1, float g1, float b1, float r2, float g2, float b2, int span, int time);
 
     void testSpeakerAdrLED(AddressableStrip *strip);
 
@@ -120,10 +100,6 @@ private:
 
     //internal objects for RGB strip control`
     UVStrip *UV;
-    RGBStrip *RGB1;
-    RGBStrip *RGB2;
-    RGBStrip *RGB3;
-    RGBStrip *RGB4;
 
     //internal objects for AddressableStrip control
     AddressableStrip *ALED1;
