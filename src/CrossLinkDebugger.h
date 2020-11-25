@@ -13,14 +13,9 @@
 
 class CrossLinkDebugger : public EventListener {
 public:
-    CrossLinkDebugger();
+    CrossLinkDebugger() {}
 
-    void setSerial(HardwareSerial &reference);
-
-    void handleEvent(char sourceId, word eventId);
-
-protected:
-    Stream *hwSerial;
+    void handleEvent(char sourceId, word eventId, byte value);
 };
 
 #endif

@@ -7,7 +7,7 @@
 #ifndef SOLENOIDS_h
 #define SOLENOIDS_h
 
-#define NUM_PINS 30
+#define NUM_PINS 26
 
 #include <Arduino.h>
 #include "EventDispatcher.h"

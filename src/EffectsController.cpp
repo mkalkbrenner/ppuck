@@ -5,110 +5,84 @@
  * Play more pinball!
  */
 
-#include "PPUCK.h"
+#include "EffectsController.h"
 
-PPUCK::PPUCK(String controllerType) {
+EffectsController::EffectsController(String controllerType) {
     _eventDispatcher = new EventDispatcher();
-    _solenoids = new Solenoids(controllerType, _eventDispatcher);
+    _scheduler = new Scheduler();
 
-    if (controllerType == "PPUC-Arduino-1.0.0") {
-        _switchMatrix = new SwitchMatrix(_eventDispatcher);
-        _lightMatrix = new LightMatrix(_eventDispatcher);
-        _pin2Dmd = new PIN2DMD(_eventDispatcher);
-        _pupComLink = new PUPComLink();
-#if defined(__IMXRT1062__) // Teensy 4.0 and 4.1
-    } else if (controllerType == "PPUC-Teensy-1.0.0") {
-        ALED1 = new AddressableStrip(aledNum1, 69); // A15
-        ALED2 = new AddressableStrip(aledNum2, 68); // A14
-        ALED3 = new AddressableStrip(aledNum3, 67); // A13
-        ALED4 = new AddressableStrip(aledNum4, 66); // A12
-        //PWM1 = new DataPort(69);
-#endif
+
+    if (controllerType == "PPUC-Teensy-0.1.0") {
+        UV = new UVStrip(37, _scheduler);
     } else {
-        Serial.print("Unsupported Arduino board: ");
+        Serial.print("Unsupported Effects Controller: ");
         Serial.println(controllerType);
     }
 }
 
-Solenoids *PPUCK::solenoids() {
-    return _solenoids;
-}
-
-SwitchMatrix *PPUCK::switchMatrix() {
-    return _switchMatrix;
-}
-
-LightMatrix *PPUCK::lightMatrix() {
-    return _lightMatrix;
-}
-
-PIN2DMD *PPUCK::pin2Dmd() {
-    return _pin2Dmd;
-}
-
-PUPComLink *PPUCK::pupComLink() {
-    return _pupComLink;
-}
-
-EventDispatcher *PPUCK::eventDispatcher() {
+EventDispatcher *EffectsController::eventDispatcher() {
     return _eventDispatcher;
 }
 
-RGBStrip *PPUCK::rgbLED1() {
+CrossLinkDebugger *EffectsController::crossLinkDebugger() {
+    return _crossLinkDebugger;
+}
+
+RGBStrip *EffectsController::rgbLED1() {
     return RGB1;
 }
 
-RGBStrip *PPUCK::rgbLED2() {
+RGBStrip *EffectsController::rgbLED2() {
     return RGB2;
 }
 
-RGBStrip *PPUCK::rgbLED3() {
+RGBStrip *EffectsController::rgbLED3() {
     return RGB3;
 }
 
 
-RGBStrip *PPUCK::rgbLED4() {
+RGBStrip *EffectsController::rgbLED4() {
     return RGB4;
 }
 
-AddressableStrip *PPUCK::adrLED1() {
+AddressableStrip *EffectsController::adrLED1() {
     return ALED1;
 }
 
-AddressableStrip *PPUCK::adrLED2() {
+AddressableStrip *EffectsController::adrLED2() {
     return ALED2;
 }
 
-AddressableStrip *PPUCK::adrLED3() {
+AddressableStrip *EffectsController::adrLED3() {
     return ALED3;
 }
 
-AddressableStrip *PPUCK::adrLED4() {
+AddressableStrip *EffectsController::adrLED4() {
     return ALED4;
 }
 
-AddressableMatrix *PPUCK::adrMatrix(AddressableStrip *adr, int col, int row, int start) {
+AddressableMatrix *EffectsController::adrMatrix(AddressableStrip *adr, int col, int row, int start) {
     return new AddressableMatrix(adr, col, row, start);
 }
 
-DataPort *PPUCK::port1() {
+DataPort *EffectsController::port1() {
     return DATAPORT1;
 }
 
-DataPort *PPUCK::port2() {
+DataPort *EffectsController::port2() {
     return DATAPORT2;
 }
 
-DataPort *PPUCK::port3() {
+DataPort *EffectsController::port3() {
     return DATAPORT3;
 }
 
-DataPort *PPUCK::port4() {
+DataPort *EffectsController::port4() {
     return DATAPORT4;
 }
 
 //fade out all addressable strips
-void PPUCK::fadeOutAllAdr(float time) {
+void EffectsController::fadeOutAllAdr(float time) {
     time = time / 256;
     for (int i = 1; i < 255; i++) {
         //_pinState->update();
@@ -128,12 +102,12 @@ void PPUCK::fadeOutAllAdr(float time) {
 //note that strip colors must be previously set.  
 //E.g.,:  ALED1->color("red", 1);  //brightness of 1
 
-void PPUCK::colorAllAdrRGB(int r, int g, int b) {
+void EffectsController::colorAllAdrRGB(int r, int g, int b) {
     ALED1->colorRGB(r, g, b);
     ALED2->colorRGB(r, g, b);
 }
 
-void PPUCK::colorAllAdr(String color) {
+void EffectsController::colorAllAdr(String color) {
     int r = 0;
     int g = 0;
     int b = 0;
@@ -141,7 +115,7 @@ void PPUCK::colorAllAdr(String color) {
     colorAllAdrRGB(r, g, b);
 }
 
-void PPUCK::fadeInAllAdrRGB(int r, int g, int b, float time) {
+void EffectsController::fadeInAllAdrRGB(int r, int g, int b, float time) {
     time = time / 256;
     ALED1->strip()->setBrightness(1);
     ALED1->strip()->show();
@@ -158,7 +132,7 @@ void PPUCK::fadeInAllAdrRGB(int r, int g, int b, float time) {
     }
 }
 
-void PPUCK::fadeInAllAdr(String color, float time) {
+void EffectsController::fadeInAllAdr(String color, float time) {
     int r = 0;
     int g = 0;
     int b = 0;
@@ -166,7 +140,7 @@ void PPUCK::fadeInAllAdr(String color, float time) {
     fadeInAllAdrRGB(r, g, b, time);
 }
 
-void PPUCK::fadeAllAdrRGB2RGB(float r1, float g1, float b1, float r2, float g2, float b2, float time) {
+void EffectsController::fadeAllAdrRGB2RGB(float r1, float g1, float b1, float r2, float g2, float b2, float time) {
     time = time / 256;
     ALED1->colorRGB(r1, g1, b1, 250);
     ALED2->colorRGB(r1, g1, b1, 250);
@@ -196,7 +170,7 @@ void PPUCK::fadeAllAdrRGB2RGB(float r1, float g1, float b1, float r2, float g2, 
     }
 }
 
-void PPUCK::fadeAllAdrColor2Color(String color1, String color2, float time) {
+void EffectsController::fadeAllAdrColor2Color(String color1, String color2, float time) {
     int r1, g1, b1;
     int r2, g2, b2;
     ALED1->color2RGB(color1, r1, g1, b1);
@@ -204,7 +178,7 @@ void PPUCK::fadeAllAdrColor2Color(String color1, String color2, float time) {
     fadeAllAdrRGB2RGB(r1, g1, b1, r2, g2, b2, time);
 }
 
-void PPUCK::chaseAllAdr2RGB(float r1, float g1, float b1, float r2, float g2, float b2, float span, int time, int dir) {
+void EffectsController::chaseAllAdr2RGB(float r1, float g1, float b1, float r2, float g2, float b2, float span, int time, int dir) {
     int pos;
     int numP = ALED1->strip()->numPixels();
     if (ALED2->strip()->numPixels() > numP) { numP = ALED2->strip()->numPixels(); }
@@ -242,7 +216,7 @@ void PPUCK::chaseAllAdr2RGB(float r1, float g1, float b1, float r2, float g2, fl
     }
 }
 
-void PPUCK::chaseAllAdr2Color(String color1, String color2, float span, int time, int dir) {
+void EffectsController::chaseAllAdr2Color(String color1, String color2, float span, int time, int dir) {
     int r1, g1, b1;
     int r2, g2, b2;
     ALED1->color2RGB(color1, r1, g1, b1);
@@ -250,7 +224,7 @@ void PPUCK::chaseAllAdr2Color(String color1, String color2, float span, int time
     chaseAllAdr2RGB(r1, g1, b1, r2, g2, b2, span, time, dir);
 }
 
-void PPUCK::chaseAllAdr2RGBFromPoint(int pos, float r1, float g1, float b1, float r2, float g2, float b2, int span,
+void EffectsController::chaseAllAdr2RGBFromPoint(int pos, float r1, float g1, float b1, float r2, float g2, float b2, int span,
                                         int time) {
     int numP = ALED1->strip()->numPixels();
     if (ALED2->strip()->numPixels() > numP) { numP = ALED2->strip()->numPixels(); }
@@ -304,7 +278,7 @@ void PPUCK::chaseAllAdr2RGBFromPoint(int pos, float r1, float g1, float b1, floa
     }
 }
 
-void PPUCK::testRGBStrip(RGBStrip *strip) {
+void EffectsController::testRGBStrip(RGBStrip *strip) {
     strip->set("red");
     delay(300);
     strip->set("green");
@@ -349,24 +323,24 @@ void PPUCK::testRGBStrip(RGBStrip *strip) {
     delay(500);
 }
 
-void PPUCK::testRGBStrip1() {
+void EffectsController::testRGBStrip1() {
     testRGBStrip(RGB1);
 }
 
-void PPUCK::testRGBStrip2() {
+void EffectsController::testRGBStrip2() {
     testRGBStrip(RGB2);
 }
 
-void PPUCK::testRGBStrip3() {
+void EffectsController::testRGBStrip3() {
     testRGBStrip(RGB3);
 }
 
-void PPUCK::testRGBStrip4() {
+void EffectsController::testRGBStrip4() {
     testRGBStrip(RGB4);
 }
 
 
-void PPUCK::testSpeakerAdrLED(AddressableStrip *strip) {
+void EffectsController::testSpeakerAdrLED(AddressableStrip *strip) {
     //chase2RGBCont(float r1, float g1, float b1, float r2, float g2, float b2, float span, int time, int dir, int startLED, int endLED)
 
     // Slow Red/Blue
@@ -435,13 +409,13 @@ void PPUCK::testSpeakerAdrLED(AddressableStrip *strip) {
 
 }
 
-void PPUCK::testSpeakerAdrLED1() {
+void EffectsController::testSpeakerAdrLED1() {
     testSpeakerAdrLED(ALED1);
 
 }
 
 
-void PPUCK::testAdrLED(AddressableStrip *strip) {
+void EffectsController::testAdrLED(AddressableStrip *strip) {
     strip->chase("green", 10, 10, 1);
     strip->chase("blue", 10, 10, -1);
     strip->chase("red", 10, 10, 1);
@@ -528,7 +502,7 @@ void PPUCK::testAdrLED(AddressableStrip *strip) {
     delay(200);
 }
 
-void PPUCK::testAdrLEDAlpha(AddressableStrip *strip) {
+void EffectsController::testAdrLEDAlpha(AddressableStrip *strip) {
     strip->bullet("red", 10, 1, 1);
     strip->bullet("red", 10, 1, -1);
     strip->bullet("blue", 10, 1, 1);
@@ -546,34 +520,34 @@ void PPUCK::testAdrLEDAlpha(AddressableStrip *strip) {
 
 }
 
-void PPUCK::testAdrLED1() {
+void EffectsController::testAdrLED1() {
     testAdrLED(ALED1);
 }
 
-void PPUCK::testAdrLED2() {
+void EffectsController::testAdrLED2() {
     testAdrLED(ALED2);
 }
 
-void PPUCK::testAdrLED3() {
+void EffectsController::testAdrLED3() {
     testAdrLED(ALED3);
 }
 
-void PPUCK::testAdrLED4() {
+void EffectsController::testAdrLED4() {
     testAdrLED(ALED4);
 }
 
-void PPUCK::testAdrLED1Alpha() {
+void EffectsController::testAdrLED1Alpha() {
     testAdrLEDAlpha(ALED1);
 }
 
-void PPUCK::testAdrLED2Alpha() {
+void EffectsController::testAdrLED2Alpha() {
     testAdrLEDAlpha(ALED2);
 }
 
-void PPUCK::testAdrLED3Alpha() {
+void EffectsController::testAdrLED3Alpha() {
     testAdrLEDAlpha(ALED3);
 }
 
-void PPUCK::testAdrLED4Alpha() {
+void EffectsController::testAdrLED4Alpha() {
     testAdrLEDAlpha(ALED4);
 }

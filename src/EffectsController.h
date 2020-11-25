@@ -1,39 +1,30 @@
-#ifndef PPUCK_h
-#define PPUCK_h
+#ifndef EFFECTSCONTROLLER_h
+#define EFFECTSCONTROLLER_h
 
 #include <Arduino.h>
+#include <TaskScheduler.h>
 
 #include "RGBStrip.h"
 #include "AddressableStrip.h"
 #include "AddressableMatrix.h"
-#include "Solenoids.h"
 #include "DataPort.h"
-#include "SwitchMatrix.h"
-#include "LightMatrix.h"
-#include "PIN2DMD.h"
-#include "PUPComLink.h"
 #include "EventDispatcher.h"
 #include "EventListener.h"
+#include "UVStrip.h"
+#include "CrossLinkDebugger.h"
 
-class PPUCK {
-protected:
+class EffectsController {
 
 public:
-    PPUCK(String controllerType);
-
-    Solenoids *solenoids();
-
-    SwitchMatrix *switchMatrix();
-
-    LightMatrix *lightMatrix();
-
-    PIN2DMD *pin2Dmd();
-
-    PUPComLink *pupComLink();
+    EffectsController(String controllerType);
 
     EventDispatcher *eventDispatcher();
 
+    CrossLinkDebugger *crossLinkDebugger();
+
     //functions for controlling 12V RGB strips
+    UVStrip *uv();
+
     RGBStrip *rgbLED1();
 
     RGBStrip *rgbLED2();
@@ -123,15 +114,12 @@ public:
     void testAdrLED4Alpha();
 
 private:
-    //internal object for monitoring pinball machine states
-    Solenoids *_solenoids;
-    SwitchMatrix *_switchMatrix;
-    LightMatrix *_lightMatrix;
-    PIN2DMD *_pin2Dmd;
-    PUPComLink *_pupComLink;
     EventDispatcher *_eventDispatcher;
+    Scheduler *_scheduler;
+    CrossLinkDebugger *_crossLinkDebugger;
 
     //internal objects for RGB strip control`
+    UVStrip *UV;
     RGBStrip *RGB1;
     RGBStrip *RGB2;
     RGBStrip *RGB3;

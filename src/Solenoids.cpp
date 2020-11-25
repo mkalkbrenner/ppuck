@@ -3,7 +3,7 @@
 Solenoids::Solenoids(String controllerType, EventDispatcher* ed) {
     eventDispatcher = ed;
 
-    if (controllerType == "PPUC-Arduino-1.0.0") {
+    if (controllerType == "PPUC-Arduino-0.1.0") {
         pins[0] = 8;
         pins[1] = 9;
         pins[2] = 10;
@@ -30,42 +30,6 @@ Solenoids::Solenoids(String controllerType, EventDispatcher* ed) {
         pins[23] = 47;
         pins[24] = 48;
         pins[25] = 49;
-        pins[26] = 50;
-        pins[27] = 51;
-        pins[28] = 52;
-        pins[29] = 53;
-    }
-    else if (controllerType == "PPUC-Teensy-1.0.0") {
-        pins[0] = -1;
-        pins[1] = -1;
-        pins[2] = -1;
-        pins[4] = -1;
-        pins[3] = -1;
-        pins[5] = -1;
-        pins[6] = -1;
-        pins[7] = -1;
-        pins[8] = -1;
-        pins[9] = -1;
-        pins[10] = -1;
-        pins[11] = -1;
-        pins[12] = -1;
-        pins[13] = -1;
-        pins[14] = -1;
-        pins[15] = -1;
-        pins[16] = -1;
-        pins[17] = -1;
-        pins[18] = -1;
-        pins[19] = -1;
-        pins[20] = -1;
-        pins[21] = -1;
-        pins[22] = -1;
-        pins[23] = -1;
-        pins[24] = -1;
-        pins[25] = -1;
-        pins[24] = -1;
-        pins[27] = -1;
-        pins[28] = -1;
-        pins[29] = -1;
     }
 
     for (int i = 0; i < NUM_PINS; i++) {
